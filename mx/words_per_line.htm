@@ -1,0 +1,5229 @@
+﻿<doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Words per Line</title>
+    <script>
+
+      /*
+      todo: create text lib that adds controls to textarea:
+      #     toggles numbers
+      1-9   shows 1-9 words
+      1-9 > shows more than 1-9 words
+      0     shows all
+      */
+
+      // cache DOM reference  
+      var text_area;
+      var count_label;
+
+      var base_text = '';  // copy of intitial text
+      var word_count = 0;
+
+      // transformation functions
+      var words = function(line) {       
+        var re = /[\s/-]/;  // split on whitepace, /
+        var spaces = word_count - 1;
+        return (spaces === line.split(re).length - 1) ? line : null;
+      }
+
+      function setWords(n) {
+
+        text_area.value = base_text;
+
+        if (n > 0) {
+          word_count = n;
+          actOnEachLine(text_area, words);
+        } else {
+          word_count = 0;
+        } 
+
+        setLabel();
+      }
+
+      function addWord() {       
+
+        text_area.value = base_text;
+
+        word_count++;
+        actOnEachLine(text_area, words);
+        setLabel();
+      }
+
+      function removeWord() {       
+
+        if (word_count > 1) {
+          text_area.value = base_text;
+
+          word_count--;  
+          actOnEachLine(text_area, words);
+          setLabel();
+        }        
+      }
+
+      function actOnEachLine(textarea_element, func) {
+        var lines = textarea_element.value.replace(/\r\n/g, "\n").split("\n");
+        var new_lines, i;
+
+        // Use the map() method of Array where available 
+        if (typeof lines.map != "undefined") {
+          new_lines = lines.map(func);
+        } else {
+          new_lines = [];
+          i = lines.length;
+          while (i--) {
+            new_lines[i] = func(lines[i]);
+          }
+        }
+
+// http://blog.rodneyrehm.de/archives/14-Sorting-Were-Doing-It-Wrong.html
+
+		new_lines.sort(function (a, b) {
+		
+          if (a === null) return 1;
+		  if (b === null) return -1;
+          if (a === null && b === null) return 0;
+		  return a.localeCompare(b);
+		});
+
+        // textarea.value = newLines.join("\r\n");
+        textarea_element.value = new_lines.filter(function (val) {return (val||[]).length > 0;}).join("\r\n");
+      }
+
+      // display functions
+      function setLabel() {
+        count_text = (word_count > 0) ? word_count : "all";
+
+        while( count_label.firstChild ) { 
+          count_label.removeChild( count_label.firstChild );
+        }
+        count_label.appendChild(document.createTextNode(count_text));
+      }     
+      
+      // initialize, handle changes in textarea 
+      window.addEventListener(
+        'load', 
+        function() {
+          text_area = document.getElementById("corpus");
+          count_label = document.getElementById("countlabel");
+          base_text = text_area.value;
+          text_area.addEventListener(
+            'change',
+            function() {base_text = text_area.value},
+            false
+          );
+        }, 
+        false
+      );
+    </script>
+  </head>
+  <body>
+    <div style="text-align:center""><a href="/">home</a></div>
+    <div>
+      word count:&nbsp;<span id="countlabel">all</span>
+    </div>
+    <div>
+      <button type="button" onclick="setWords(0);">all</button>
+      &nbsp;
+      <button type="button" onclick="removeWord();">&lt;&lt;</button>
+      <button type="button" onclick="setWords(1);">1</button>
+      <button type="button" onclick="setWords(2);">2</button>
+      <button type="button" onclick="setWords(3);">3</button>
+      <button type="button" onclick="setWords(4);">4</button>
+      <button type="button" onclick="setWords(5);">5</button>
+      <button type="button" onclick="setWords(6);">6</button>
+      <button type="button" onclick="setWords(7);">7</button>
+      <button type="button" onclick="setWords(8);">8</button>
+      <button type="button" onclick="setWords(9);">9</button>
+      <button type="button" onclick="addWord();">&gt;&gt;</button>
+    </div>      
+    <textarea name="corpus" id="corpus" form="form1" rows="200" cols="150">
+book: Angels Fear
+
+11:26 am
+3/3/96
+epistemology
+epistemology is a matter of relationship
+the sacred
+reflexive misunderstanding
+the mere use of the word religion is likely to trigger reflexive misunderstanding
+the potential for integration
+metalogues
+metalogue
+Gregory Bateson
+Mary Catherine Bateson
+the conversation is always moving between intellect and emotion
+his questions
+his way of formulating questions
+scientific precision
+systematic attention
+the functioning framework of life
+evolution is a mental process
+mind
+ecology
+the process of evolution
+the process of evolution shares key characteristics with other systemic processes, including thought
+evolution is a process
+a pattern which connects
+the pattern which connects
+what we are able to understand about knowing
+a viable clarity
+a mode of knowing
+a mode of knowing which attributes a certain sacredness to the organization of the biological world
+the question of the sacred
+the question of the aesthetic
+the aesthetic
+the question of consciousness
+a cybernetic ethics
+local epistemology
+the structures of knowing
+comparative epistemology
+verbal precision
+the necessity of the sacred
+an epistemology
+self-corrective and recursive loops of adaptation
+Saint Thomas Aquinas
+positive feedback
+a necessary unity
+escalating change
+schismogenesis
+learning to learn
+learning to deal with and expect a given kind of context for adaptive action
+character change due to experience
+Pleroma
+Creatura
+logical typing
+multiple levels of logical typing
+book: Mind and Nature: A Necessary Unity
+a nondualistic view of the world
+monism
+deep epistemological panic
+the category mental process
+homology
+mental process
+information can be defined as a difference that makes a difference
+responsiveness to difference
+the difference between the paper and the ink is the signal
+internal organization
+the notion of a mind
+a mind is an aggregate of interacting parts or components
+the interaction between parts of mind is triggered by difference
+mental process requires collateral energy
+mental process requires circular (or more complex) chains of determination
+in mental process, the effects of difference are to be regarded as transforms (i.e. coded versions) of events which preceded them
+the description and classification of these processes of transformation disclose a hierarchy of logical types immanent in the phenomena
+complex phenomena
+because what is is identical for all human purposes with what can be known, there can be no clear line between epistemology and ontology
+comparison of difference
+the science that studies the process of knowing
+the capacity to respond to differences
+how knowing is possible
+how knowing is done
+epistemology as the study of phenomena at an interface and as a branch of natural history
+epistemological habits
+epistemologies
+local epistemologies
+Alfred Korzybski
+the map is not the territory
+the name is not the thing named
+the name of the name is not the name
+the item in the class is not the class
+the class is not a member of itself
+some classes have no members
+basic components of epistemology
+Jung's archetypes
+Saint Augustine's Eternal Verities
+an artifact of human thought
+personal epistemologies
+what is heresy?
+what is a sacrament?
+is it possible to be epistemologically wrong?
+epistemological error
+the language of metaphors
+among the metaphors
+the names of relationships
+the logic of metaphor
+classification
+syllogism in Barbara
+syllogisms in grass must be the dominant mode of communicating interconnection of ideas in all preverbal realms
+grammatical relationships
+the correct units of description are the relations between them
+the preverbal level
+the verbal level
+simile
+the possibility of simple negation
+the possibility of classification
+the possibility of subject-predicate differentiation
+the possibility of explicit context marking
+the act of translation from metaphor to simile
+shared predicates
+metaphor is the logic upon which the biological world has been built
+the subject of consciousness
+how information moves within a system
+consciousness
+consciousness means you know that you know
+a shift in logical types
+logical types
+our mental processes
+human epistemologies
+the natural history of human knowledge
+the natural history of human knowledge and action
+the domain of epistemology
+mental explanation
+the aesthetic organization of behavior
+the flow of ideas
+thinking is my job in life
+the use of the intellect
+spontaneity
+what sorts of thought are the very stuff of which spontaneity is made?
+Prospero
+we are such stuff as dreams are made on
+dreams are bits and pieces of the stuff of which we are made
+matters that are part of religion
+prayer
+Sol Tax
+reverence
+Coleridge
+moments of change
+enlightenment
+a sudden discovery or realization of life
+the biological nature of the world
+the biological nature of the world in which we live
+a sudden realization of the biological nature of the world in which we live
+aesthetic determination
+aesthetic determination in human and animal behavior
+a standard of integrity
+the cultivation of integrity
+an integration of the group
+he blessed them unaware
+a knowledge of natural history
+a religious rite
+absolution of guilt
+initiating culture
+initiating cultures
+an initiating culture
+matrix of mind
+Adji Darma
+the notion of not communicating something
+the notion of not communicating something under some circumstances
+avoidance of communication
+Actaeon
+Orpheus
+Pentheus
+noncommunication
+the nature of ideas
+necessary noncommunication
+living systems
+an inset story is a standard hypnotic device
+an inset story is a standard hypnotic device, a trance induction device
+sacrilege
+job
+the book of Job
+shifting of context
+the importance of keeping a secret
+the basic discontinuities of natural history
+cross-sex knowledge
+secrecy
+secrecy is an instrument of power and control
+openness is one of those things that can be overdone
+the movement of information
+epistemological problems
+necessary epistemological problems
+sacred secrets
+unknowing
+mystery
+a lack of self-consciousness
+the context of the interaction
+an epistemology of the sacred
+towards an epistemology of the sacred
+the relation
+the relation between these two systems of explanation
+the relation between two systems
+the description of an organism
+genotype
+phenotype
+phenotypic
+a creature subject to learning
+genotypic determination
+a background of explanation
+logical type levels
+genetic control
+truer
+a truer picture
+relation
+reference to relation
+larger patterns
+the larger patterns
+a syntax of description
+the notion of number
+a different logical type
+a pattern
+essentially a pattern
+number as pattern
+number as quantity/number as pattern
+number as quantity
+quantity/pattern
+the difference between quantity and pattern
+this difference between quantity and pattern
+morphogenesis
+the relation between genetics and morphogenesis
+metamerism
+symmetry
+Warren McCulloch
+what is number that a man may know it, and a man, that he may know a number?
+the total pattern
+the relation between pattern and quantity
+genotypic explanation
+a normal curve
+the arena where quantity meets pattern
+the soma
+the developing body
+environmental explanation
+environmental determination
+a matter of pattern
+a matter of patterns
+quantitative explanation
+quantitative explanations
+relationship between quantitative and qualitative change
+the relationship between quantitative and qualitative change
+the cybernetic philosophy of evolution
+informational content
+quantity does not determine pattern
+explanation by pattern
+explanation by quantity
+explanation by pattern/explanation by quantity
+the concept of a question
+the prelinguistic biological world
+something like a question
+bilateral symmetry
+the unfertilized frog egg
+the nature of a question
+a state of question
+a state of readiness to receive a certain piece of information
+a digital patterned resolution
+the question
+the question is the quantitative
+the question is the quantitative while the answer is qualitative
+a list of propositional variables
+the problem of describing an organism
+describing an organism
+limits of tolerance
+homeostatic circuits
+circuits
+circuits having homeostatic characteristics
+circuits having homeostatic or metahomeostatic characteristics
+circuits having metahomeostatic characteristics
+metahomeostatic characteristics
+metahomeostatic
+homeostatic
+to maintain the truth of the ongoing propositional variable
+the truth of the ongoing propositional variable
+the ongoing propositional variable
+propositional variable
+propositional variables
+homeostatic structure
+the homeostatic structure
+a series of homeostatic circuits
+embryology
+step functions
+the planes of fracture
+planes of fracture
+a fracture plane
+embryological process
+a defined state of readiness
+readiness
+relaxation-oscillation
+homeostatic control
+discontinuity
+complex cybernetic organization
+cybernetic organization
+quantitative control
+there will always be discontinuity between quantitative control and the breakdown of control that occurs when quantities become too great
+the limit of fluctuation
+threshold
+thresholds
+the structure of a system
+the structure of a given system
+the Weber-Fechner laws
+a Weber-Fechner relationship
+cybernetic systems
+whenever the relation across an interface is continuously variable on both sides
+a threshold of perceivable difference
+threshold of perceivable differences
+hormonal communication
+the Weber-Fechner relation
+biological communication
+all digital information is concerned with difference
+news of difference
+a difference which makes a difference
+a difference which makes a difference at a distance
+the concept of difference
+the process of perception
+the difference must overcome a threshold
+the difference must overcome a threshold value
+the difference must be difference from a threshold value
+the sense organs
+survival value
+the logarithmic scale
+the logarithmic scale in biological sensitivity
+a Weber-Fechner regularity
+the interface between nerve and environment
+a deep difference in kind
+the statistics of a population of neurons
+transformations of quantity
+transformations of quantity imposed by the Weber-Fechner relation
+the interface between Creatura and Pleroma
+Fechner
+natural history
+tautology and natural history
+both tautology and natural history
+I haven't thought it through yet
+schizophrenia
+cultural myth
+the double bind
+a schizophrenic machine
+chronic maladjustment
+palliatives
+the immorality of palliatives
+the way in which religion can be converted into entertainment
+virtuous pain
+mental characteristics
+mental characteristics are relational
+a wider learning
+the changing context
+a particular context
+first-order change
+second-order change
+a relationship
+addiction-adaptation-attachment
+a particular sort of change
+you cannot take a variable in an interlocking system and have it change continuously in the same direction
+art/entertainment
+reassurance is the food of anxiety
+entertainment is the food of depression
+a concept of addiction
+formal questions
+to think in terms of a machine
+interactive process
+questions of value
+reversible
+irreversible
+reversible/irreversible
+self-limiting
+self-maximizing
+the characteristics of a larger whole
+systemic interdependency
+systemic dependency
+acquiring a systemic dependency
+acquiring a dependency
+a systemic change
+systemic change
+escalation
+an escalating process
+a change in sign
+zero learning
+homeostatic cycle
+very large mental systems
+mentality
+systems theory
+these are questions that permit more than one answer
+the shape of personal history
+epistemology in the biological world
+pattern which connects
+the problems of thinking
+the problems of thinking about the biological world
+a syntax of consciousness
+Nature is a double-binding bitch
+a culture is an adaptive system
+total systems
+consistency is important
+the logical type ladder
+up the logical type ladder
+a sense of the whole
+several layers of meaning
+to believe in
+believe to exist
+believe to represent an accurate idea
+rely on
+trust in
+the processes of life
+the biological world
+group/class
+formal resemblances
+messages in biology
+biological systems of control
+ordered/organized
+biological entities
+life is normative
+truths about truths
+a natural history of the relations between ideas
+relations between things
+definitions of process
+the processes of thought
+what the structure of the brain says to the processes of thought
+abstract statements
+the order of procedures
+proper sequence
+proper synchrony
+laws of sequence
+what question should I answer next?
+the order of steps
+between the lines of a computation is concealed the order of the steps
+anangke
+the order of the steps
+the sequence of the steps for epigenesis
+the order of the steps for epigenesis
+mental
+recursiveness
+relations between
+discussion of relations
+vast mental process
+communicative process
+structural information
+apodoses
+momentary readiness
+necessary incompleteness
+language is digital
+language is digital and discontinuous
+discontinuum
+a discontinuum
+a discontinuum of variables
+an interrelated aggregate of messages
+biological organization
+like language
+mental ambience
+interfaces between mental subsystems
+the illusory nature of free will
+the mental landscape
+the next order of control
+the next order of freedom
+interfaces between mental systems
+apparent control
+living natural history
+the living natural history of every organism
+an essential component of human life
+a level of complexity
+a certain level of complexity
+the freedom to shape the question
+the freedom to shape the questions
+what is called power
+the illusion of power
+human cultural systems
+interfaces between human mental subsystems
+the mechanics of illusion
+fey
+the mental world
+abduction
+the network of mind
+interface phenomena
+imaginary organisms
+mental processes
+systemic complexity
+a more complex mental system
+mental system
+mental subsystem
+mental subsystems
+a possibility of wholeness
+what do we think a man is?
+what is it to be human?
+we should be careful what we pretend because we become what we pretend
+self-validation
+the storm of ideas in which we are all living
+find spiritual rest
+spiritual rest
+an insufficient holism
+insufficient holism
+the necessary characteristics of the whole
+wholeness
+holistic
+Smuts
+holistic solutions
+systematic thinking
+Dr. Andrew Still
+characteristics of systems
+the characteristics of circular and self-corrective systems
+thinking about mind
+thinking about life
+thinking about adaptation
+thinking about wholes
+phenomena of mind
+mental organization
+the notion of responsibility
+the nature of mental process
+the epistemology of living systems
+the process of thought
+knowledge as artifact
+the conceptual world of another culture
+observable patterns of behavior
+a kind of mental image
+a community the lives by communication
+learned patterns of adaptation
+the transmission of learned patterns of adaptation
+message systems
+the context of relationships
+a living system
+living system
+a path to self-knowledge
+adaptive mechanisms
+a network of communications
+pattern and relationship
+biological communication concerns pattern and relationship
+the genetic determination of the human hand
+false reification
+relationships
+linguistic communication
+the evolution of language
+the history of science
+a semantics appropriate to creatura
+a syntax appropriate to creatura
+the generation of new combinations
+ways of knowing
+ways of knowing that could be passed on
+primary process
+error is a biological phenomenon
+a process of thought
+internal consistency
+epigenesis
+the existing range of human communication
+creatural communication
+the level of pleroma
+the special kinds of pathology that have to do with consciousness
+only differences and relationships
+differences and relationships
+errors on the general order of not knowing what we are dealing with
+acting in ways that violate the communicative web
+the Wenner-Gren conference
+a larger system
+syllogisms of metaphor
+the theme of metaphor
+the use of syllogisms of metaphor
+the search for insight through analogy
+to assert significant similarity
+a formal similarity that suggests a relationship
+the human version of mental process
+their own order of truth
+the description of mind
+disciplines of communication
+the flexibility of human language
+a creatural grammar
+the semantics of Korzybski
+an inappropriate form of discourse
+creatural grammar
+a description consisting of multiple parts
+the problem of a description consisting of multiple parts which is nevertheless unified
+logical organization
+the complexity of organization in living systems
+the living system
+each term of a metaphor
+each term of a metaphor is manifold
+each term of a metaphor must have its own internal complexity
+the place of ratios in perception
+extended metaphor
+the parable
+temporal framing
+temporal framing in terms of narrative
+the basis of a metaphor
+a metaphor has multiple parts
+family of metaphors
+a mental model
+the necessary complexity
+necessary complexity
+the self
+the net of metaphor
+the experience of the self
+the experience of the self and the possibility of reference to it
+sympathy/empathy
+the evocation of self-knowledge as a model for understanding another
+the sense of self
+the mental model of another personality
+identification
+empathy is a discipline
+profound misunderstanding
+a mental model one can enter
+a mental model that one can enter
+metaphorical relationship
+a religion is a rich, internally structured model that stands in metaphorical relationship to the whole of life
+complex whole
+multiplicity of relations
+the truth of integration
+a unified understanding
+an extended metaphor
+complex regularity
+integrated complexity
+the unity of god
+the relations between them
+what I know of myself
+reminding me of what I know of myself
+a order of knowledge
+the holistic love
+holistic love
+meditation
+meditation as a way of unlearning the addiction to entertainment
+meditation as a way of unlearning the addiction to entertainment and its accompanying vulnerability to boredom
+religious metaphors
+the living world
+the paradoxes of religion
+unsuccessful adaptation
+metaphorical thinking
+the notion of metaphorical thinking
+systems which consist of multiple organisms
+change in value
+dynamic pattern
+central metaphor
+its own central metaphor
+it uses its own internal structure to understand its environment
+it uses its own internal structure to organize and generate its response to its environment
+aspect of information
+the formal characteristics
+formal characteristics
+appropriate complexity
+the appropriate complexity
+the metaphor
+creatural ways of thinking
+barriers to human understanding
+double binds
+an area of experience that privileges creatural ways of thinking
+the outcome of mental process
+multiple cycles of self-correction
+a complexity of internal relations
+aesthetic unity
+systemic integration
+notions of systemic integration
+notions of holistic perception
+the appreciation of a work of art
+the appreciation of a work of art is a recognition
+a recognition
+a recognition of the self
+a double argument
+a double argument of double description
+double description
+a double description
+formal abstract thought
+the questions of aesthetics
+the questions of the sacred
+double argument
+deity can best be identified with timeless abstract truths
+deity pervades all of nature
+the abstract relationships recognizable in nature
+the argument that there are limits to what science can know
+there are limits to what science can know
+limitations on knowledge
+the existence of limitations on knowledge
+nondemonstrable belief
+particular kinds of nondemonstrable belief
+the limits on scientific knowledge
+how organisms adapt to the necessary limits of communication
+how organisms adapt to the necessary limits of knowledge
+what are the economies that make it possible to do much with little?
+why religion?
+addressing unavoidable epistemological questions
+unavoidable epistemological questions
+epistemological questions
+the limitations on knowledge
+the paradoxes produced by recursiveness
+the unavoidable gaps in every description
+kind of cognitive system
+cognitive system
+religion has been the only kind of kind of cognitive system that could provide a model for the integration and complexity of the natural world
+a model for the integration and complexity of the natural world
+the integration and complexity of the natural world
+integration and complexity
+the natural world
+the integrated fabric of mental process that envelops all our lives
+angels
+religious traditions
+vast, interconnected metaphorical systems
+metaphors for meditation
+the principle of double description
+the richest knowledge of the tree comes from both myth and botany
+apart from creatura, nothing can be known; apart from pleroma, there is nothing to know
+the artist and visionary sometimes know more than all our science
+may god us keep from single vision and Newton's sleep
+the double question
+the nature of evolution
+drawing the connections
+pieces of thinking
+Lois Bateson
+John Bateson
+the world of mental process
+Carl Gustav Jung
+biological evolution
+comparison
+wherever information--or comparison--is of the essence of our explanation, there, for me, is mental process
+a difference that makes a difference
+regularities
+that unliving world
+difference, distinction, and information
+levels of description
+an apparent dualism
+apparent dualism
+the presence of certain organizational and communicational characteristics
+the presence of certain organizational and communicational characteristics which are themselves not material
+what is a mind?
+mental interactions
+the characterization of the notion of a mind
+parts of organisms
+complex phenomena called systems
+those complex phenomena called systems
+systems consisting of multiple organisms
+systems in which some parts are living and some parts not
+systems in which there are no living parts
+something that can receive information
+a something that can receive information
+a something that can receive information and can, through the self-regulation or self-correction made possible by circular trains of causation, maintain the truth of certain propositions about itself
+self-replication
+a given mind
+a larger and more complex mind
+a given mind is likely to be a component or subsystem in some larger and more complex mind
+interfaces
+interfaces between different kinds of mental subsystems
+certain characteristics of the interface
+certain characteristics of the interface between Pleroma and Creatura
+what can be known
+there can be no clear line between epistemology and ontology
+Jung's epistemology
+rules of thought
+the science of epistemology
+capacity to respond to differences
+the interaction of the capacity to respond to differences, on the one hand, with the material world in which those differences somehow originate, on the other
+how knowledge is possible
+how knowledge is possible/how knowledge is done
+healthy epistemologies
+every cultural, religious, or scientific system promotes particular epistemological habits
+rules of accurate thought
+rules of accurate thought and communication
+necessarily true
+Saint Augustine
+ideas of cultural relativity
+cultural relativity
+abstract questions
+the possibility of epistemological error
+the roots of thought
+reductio ad absurdum
+the Pythagoreans
+mental chaos
+abstract propositions
+meaningful
+mental systems
+organized systems
+patterns of mental process
+necessary limitations of mental process
+field anthropology
+a native text
+a crucial cultural utterance
+the language of metaphor
+the process of making metaphor
+the truths of metaphor
+syllogistic form
+able to achieve novelty by a combination of random and selective processes
+organizing knowledge
+animal behavior
+repetitive anatomy
+communication interconnection of ideas
+preverbal realms
+the correct units of description
+defined as relationship
+defined in terms of relationship
+naming activity
+verbal communication
+nonverbal communication
+preverbal communication
+the creativeness of human minds
+the part of the mind which makes metaphor, poetry, and religion
+as if
+the as if mode of communication
+explicit context marking
+human ethnography
+a sacred metaphor
+the invention of language
+phylogeny
+no knowledge
+conscious knowledge
+familiar experience
+self-consciousness
+conscious purpose
+pathways of internal communication
+an error in logical typing
+an ordered class
+an ordered class of states
+loss of flexibility
+unconscious mental processes
+the product of perception
+Adelbert Ames
+your epistemology
+the Ames experiments
+a discrepancy of logical type
+epistemological generalization
+deep epistemological generalization
+a faith in our own mental process
+the processes of our own creativity
+we know not the processes of our own creativity
+the processes of self-deceit
+dyads
+what it is to hold something sacred
+epistemological perplexity
+mind is an organizational characteristic
+self-correction
+the conference on conscious purpose and human adaptation
+forms of superstition
+the life of a machine
+the phenomena which result from wholeness
+when we focus too narrowly upon the parts, we fail to see the necessary characteristics of the whole
+support/prove
+mutual destruction of arguments
+the concept of heresy
+questions of belief
+questions of doubt
+a state of mind
+receipt of information
+to learn that there is no Santa Claus is perhaps the beginning of religion
+the relation between religion and magic
+magical procedures
+I accept no story of action at a distance without communication
+totemic rituals
+totemic rituals concerned with man's relationship to animals
+ritual statements of unity
+an appetitive stance
+extrovert purpose
+introvert purpose
+introvert purpose/extrovert purpose
+and if thou are at death the food of worms, how great thy use, how great thy blessing
+a technique for changing ourselves
+changes in the self
+changes in the world
+validity
+René Descartes
+the problems of mind
+mental phenomena
+materialist
+materialist/antimaterialist
+materialist superstition/antimaterialist superstition
+antimaterialist superstition
+materialist superstition
+a system of explanation
+problems of pattern
+problems of wholeness
+problems of gestalt
+problems of contrast
+quantities
+an emphasis upon quantity
+the base of mentality
+Lamarckians
+the tradition of mental explanation
+the biological philosophers
+quantitative science
+the philosophy of the industrial revolution
+the Cartesian split
+the Cartesian split between mind and matter
+what is a category?
+the nature of message
+the world of communication
+descriptive propositions
+descriptive proposition
+what is a descriptive proposition?
+the nature of perception
+subtractive difference
+subtractive differences
+ratio differences
+a subtractive difference
+formal thought
+natural unity
+an affirmation of the sacred
+in knowledge
+in art
+an affirmation of the sacred that would celebrate natural unity
+healing by visualization
+the habits of thought
+the sangha
+sangha
+any information is altered when it is incorporated in an establishment
+the issue of consistency
+Esalen
+Angels Fear
+Bateson's books
+the sensible man
+not communicating
+not communicating something
+to hold something sacred
+message system
+jumping from one statement to another
+a mental recipe
+the nature of the communicative process
+incomplete coverage
+what the hearer already knows
+use of what the hearer already knows
+art is the cunning use of what the hearer already knows
+the apodoses
+protases
+redundancy is the economical way to make a limited supply of structural information cover a complex subject
+the actual experience
+the pieces of instruction
+to form patterns
+to have the actual experience
+a basic principle
+a basic principle of human interaction
+the necessary incompleteness
+it's a nice problem
+as an addiction
+a systemic phenomenon
+as my customer
+etiology
+if you had a machine that was capable of learning
+how would you teach it?
+the commonsense thing
+unpredictably wrong
+to be unpredictably wrong
+something that looks like a solution
+a chronic maladjustment
+the joys of intoxication
+where the connection comes
+where the connection comes from
+a way of getting high
+a form of learning
+as a pathology of learning
+the capacity to be bored
+people in our society
+the difference between art and entertainment
+Collingwood talks about the difference between art and entertainment
+the real thing
+a certain discipline
+a certain discipline at the beginning
+to attend it
+keeping them entertained
+a palliative
+the feedback issue
+an increase in the addiction
+some kind of logical typing problem
+getting out of an addiction
+hitting bottom
+a terrible trap
+life has become unbearable
+some sort of surrender
+a very clever man
+at the next stage
+his voices
+going in the direction of hell
+a positive acceleration
+a positive rate of change of acceleration
+only on that condition
+trying to make ourselves safer
+it got the idea
+a new order of insight
+the solving of a problem
+the second-order adaptation
+talking as if
+to get an adaptation
+learning to do the right thing in a particular context
+the fact of the changing context
+a wider learning at the next level
+cambium
+the need for second-order change
+the withdrawal symptoms
+the entire nation
+basic premises
+where he stands
+where she stands
+an organizational characteristic
+accessible to study
+proposing a solution
+proposing a partial solution
+material objects
+unacceptable solutions
+unacceptable solutions to the problem
+the phenomena of life
+the phenomena of experience
+supernatural agency
+a supernatural agency
+gross matter
+material characteristics
+mental characteristics/material characteristics
+imagined phenomena
+contrived phenomena
+looking for a way out
+the premise of lineal causality
+species of superstition
+a need to change
+our preferences
+each theoretical system
+the counterculture
+to live with that disbelief
+their reason for being
+a good reason
+a buffer of diversity
+the older beliefs
+the old beliefs
+a more stable theoretical stance
+a plague on both of your houses
+such a stance
+a stance
+we need such a stance
+a revised philosophy
+a revised epistemology
+the intolerance
+intolerance
+this improved stance
+conceptual separation
+the conceptual separation
+too often
+the false impression
+a barrier between them and me
+to make clear
+to make abundantly clear
+these extremes of opinion
+extremes of opinion
+epistemologically naive
+epistemologically wrong
+politically dangerous
+mental health
+dangerous to mental health
+the improbable
+sense data
+I do believe
+requiring much investigation
+a form of superstition
+being narrow-minded
+out there
+my preconceptions
+what it is claimed
+what it is claimed they should prove
+the claims made
+so unlikely
+so difficult to believe
+very strong evidential proof
+words stronger than mine
+David Hume
+the fact which it endeavors to establish
+a mutual destruction of arguments
+the attesting evidence
+contradictory kinds of explanation
+the scheme of explanation
+the supernatural
+supernaturalist
+supernaturalist superstitions
+a rather small number of misconceptions
+material pathways
+organs of sense
+what they assert
+the material world
+a nonmaterial something
+a something which is not a something
+a spatial sense
+narratable information
+anthropomorphic supernaturals
+supernatural notions
+the world of matter
+why so many prefer to believe otherwise
+the practitioner
+sympathetic magic
+contagious magic
+where these conditions are met
+if we think of them as artists
+the unmocked god
+Be not deceived; God is not mocked.
+the mentality of a single human being
+characterized by
+constraints on the transmission of information
+inappropriate communication
+large organized systems
+necessary for explanation
+the characteristics of mental process
+a vast organization
+many sorts of mentality
+the highest gods
+human models
+the basic premises
+starting from these premises
+what we claim to know
+mental pathology
+sense organs
+to note that these are questions that permit more than one answer
+questions that permit more than one answer
+the great historical religions of the world
+they have obscured the matter
+to ask such questions
+any religion
+first, that in the asking of questions, there will be no limit to our hubris; and second, that there shall always be humility in our acceptance of answers
+in sharp contrast
+what questions they will ask
+a recognition of a certain unity
+a recurrent characteristic
+in the total fabric
+a certain unity
+how we should proceed
+the story of the House of Atreus
+in the next generation
+necessary sequence
+the structure of the human world
+the theme
+the theme itself
+a similar belief
+the Iatmul
+the Iatmul of New Guinea
+human agencies
+the present question
+larger systems
+aggregation in larger systems
+aggregation in larger systems also having mental characteristics
+the characteristics
+the larger mental system
+this is a question of a different order
+a piece of an answer
+reified abstractions
+in the myths
+the workings of the principle
+the participant individuals
+in human interaction
+individual beliefs
+individual beliefs become self-validating
+the belief
+the actions of the believers
+a characteristic of human individuals
+a potential for pathology
+Cadmus
+the royal house of Thebes
+the tragic necessity
+a formal contrast
+matriarchal goddesses
+mythological sequences
+as an anthropologist
+a different kind of relationship
+maternal uncles
+paternal uncles
+maternal uncles/paternal uncles
+a guardian spirit
+a balancing pair
+double expression
+in clear contrast
+an artificial mountain
+the conflicting views
+the latent contradictions
+some fundamental characteristic
+some fundamental characteristic of the larger mentality
+the names of themes
+the names of principles
+a similar state of affairs
+personal characteristics
+the appropriate etiquette
+the existence of very large systems
+the Balinese religion
+features of human religions
+similar advances
+epistemological components
+a piece of history
+vast aggregates of organization
+vast aggregates of organization having immanent mental characteristics
+scientific findings
+the basic principles of traditional religion
+a combination of approaches
+communicational regularities
+interwoven regularities
+taking shortcuts
+taking steps in the wrong order
+what might appropriately be recognized as sacred
+different rules of logic
+this classification
+the propositions of Augustine
+the analogs of logical relations
+causal sequences that proceed in a circle
+circular causal systems
+the paradox of Epimenides the Cretan
+one of the criteria
+any self-correcting circuit
+hierarchical organization
+collateral energy supply
+the physiology of organisms
+keeping the whole in balance
+arguments that move in circles
+metaphorical connections
+the description of life
+moving towards new ways of thinking
+the relations of circuits
+for a starter
+mind as an organizational characteristic
+to sustain certain mental processes
+responding to
+this way of looking
+what I would regard as unacceptable
+what I would regard as unacceptable solutions
+what I would regard as unacceptable solutions to the problem
+lineal sequences
+lineal sequences of cause and effect
+too precisely
+to invite charlatanism
+a somewhat different point of view
+both extremes
+the interface between the old and the young
+mental contact
+the context in which you live
+you have to choose between better and worse
+freedom and responsibility are a complementary pair
+limited knowledge
+limited knowledge of how to do things
+a necessary component
+to be a mental creature
+whenever a certain level of complexity is reached
+a number of subsystems
+lack of power
+the processes of education
+decisions about ideas
+decisions about quantity
+his power to innovate
+power to innovate
+a power to innovate
+that distortion of perception
+distortion of perception
+distortions of perception
+some characteristic of an organism
+let me make clear
+in the relation
+explanatory systems
+the relation between these two explanatory systems
+the relation between the two systems
+environmental impact
+in the description
+in the description of an organism
+any component that is subject to change
+any component that is subject to change under environmental impact
+the color of the skin
+genotypically
+phenotypically
+a particular human being
+so far as I know
+determining an ability
+an increase in ability
+the next level of abstraction
+the genotype and the phenotype
+to learn to change the ability
+an ability to learn to change the ability
+environmental change
+the characteristics of its genotypic determination
+the logical type
+the logical type of the specification
+every descriptive proposition
+for every descriptive proposition we may utter about a phenotype, there is a background of explanation which, at successive logical type levels, will always peel off into the genotype
+at successive logical type levels
+successive logical type levels
+the logical typing
+the logical typing of the genotypic message
+a major question
+a major set of questions
+the concentration of sugar in the blood
+an upper threshold
+a lower threshold
+an upper threshold and a lower threshold
+there is an upper threshold and a lower threshold
+these changes must be kept within tolerance
+the abstract component
+the abstract component in the trait
+an upper limit
+a limit
+a limit that is modifiable
+very strict tests
+the rising generation
+for genetic reasons
+the trait that is specified by the genotype
+a Gaussian curve
+the coordinates
+the reciprocal
+the reciprocal of this number
+the average angle
+the genotypic message
+the logical type of the genotypic message
+this very simple example
+thinking about this very simple example
+a name of an operation
+the relation between
+a more appropriate way
+a more appropriate way to describe the organism
+in the process of growth
+the message of the DNA
+a reference
+a reference to relation
+a reference to number
+locally useful
+neighboring regions
+the larger pattern
+the larger patterns must always be carried in the form of detailed instructions to the component parts
+the essence of the matter
+what we ultimately most desire
+our description
+our description of the individual phenotype
+an appropriate language
+in an appropriate language
+the point I want to make
+a syntax of description that will reflect the messages from the genotype that have determined the phenotype
+it is not a trivial matter
+it is not a trivial matter to decide
+applying to the phenotype a syntax of description that will reflect the messages from the genotype that have determined that phenotype
+their relations clearly indicated
+the ultimate perfect description
+strictly limited
+theoretical approaches
+double problems
+multiple organs
+a particular locality
+this bunch of cells
+this bunch of cells in this particular region
+this bunch of cells in this particular region of the developing embryo
+information about the total pattern
+the smaller nematodes
+the relations between environmental impact and genotypic determinants
+two sorts of explanation
+the difference between these two sorts of explanation
+the developing body of the individual
+genotypic determination tends to be a matter of patterns
+explanations by the invoking of pattern
+some people prefer quantitative explanations
+some people prefer quantitative explanations, while others prefer explanations by the invoking of pattern
+these two states of mind
+almost different enough
+political doctrines
+the relation between quantity and quality
+the relation between quantity and pattern
+a discontinuous step
+a new gestalt
+leading to a new gestalt
+the point of fracture
+supercooling
+another model
+quite suddenly
+a positive value
+a positive value up to a certain point
+the dialectical view of history
+at a given point in history
+the middle of the nineteenth century
+social differentiation
+social pressures
+a theory of evolution
+when the time is right
+the crystallation point
+the crystallation point for the new gestalt
+politically inevitable
+my own view
+my own view of the matter
+the informational value
+the informational content
+the informational content of quantity
+as an explanatory device
+quantity can never under any circumstances explain pattern
+explanation by quantity/explanation by pattern
+this deep biological level
+that is not what concerns us here
+the morphogenetic level
+at the morphogenetic level
+the sequence of events
+the vertebrate egg
+radially symmetrical
+R. G. Collingwood
+the needed information
+the vegetal pole
+the animal pole
+a radially symmetrical system
+this plane
+an unfertilized egg
+a state of readiness
+haploid
+in a state of question
+thinking about the nature of a question
+the Marxist dialectic
+political angles
+a distributed quantity
+a precise digital answer
+the chain and the weakest link
+increasing tension
+the processes of growth
+the processes of environmental impact
+the processes of evolution
+Ashby
+each of these propositions
+the fact of homeostatic circuits
+two types of pathology
+destruction of the system
+in circuits
+the value of any variable
+pathways to disaster
+deep disturbance
+such deep disturbance
+radical disturbance
+radical change
+to fix the value of the variable
+fixing the value of any variable
+any continuous increase or decrease
+any continuous increase or decrease in the value of any variable
+the homeostatic process
+the homeostatic processes
+slow-moving variables
+the variable
+in order to maintain the truth of the ongoing propositional variable
+a discontinuous effect
+the picture we get
+a qualitative change in any variable is going to have a discontinuous effect upon the homeostatic structure
+an alternative version
+quantity and quality
+the messages
+the superficial variables
+describing the system as a series of homeostatic circuits
+partly synonymous
+partly synonymous descriptions
+these are partly synonymous descriptions
+a new facet
+to prevent change
+to prevent change in the superficial variables is to promote change in the more profound
+the matter
+the matter becomes much more complex
+in the process of development
+in this form
+the specification of the fracture planes of the system
+the fracture planes of the system
+a whole series of homeostases
+the embryology
+DNA message
+in embryological process
+the break in embryological process
+to define the break in embryological process
+to define the break in embryological process and the new gestalt following the break
+still more complicated
+an almost precise analog
+a component in the fabric of the organism
+some external condition
+a defined state
+a specially designed piece of the organism
+this general characteristic
+the whole organization
+the whole organization of the organism
+the whole organization of the creature
+deep necessities
+a series of pieces of data
+the notion of not communicating
+the act of blessing
+to make them see themselves
+extra consciousness
+this avoidance of communication
+the danger of knowledge
+the mythical outcome
+being torn apart
+noncommunication of certain sorts
+the nature of the ideas
+as a marker
+secrecy as a marker
+the unuttered
+examples of necessary noncommunication
+what does it mean to hold something sacred?
+indirect discourse
+much more interesting reasons
+a tale within a tale
+a tale within a tale within a tale
+an inset story
+a hypnotic device
+a standard hypnotic device
+a trance induction device
+fine distinctions
+fine distinctions in human communication
+violations of fine distinctions in human communication
+the notion of prayer as for something
+symptoms of pathology
+a reframing
+a redefinition
+a redefinition of context
+a reframing of context
+what is going wrong in the relationship
+the shifting of context
+to control knowledge
+to control communication
+basic discontinuities
+the issue of responsibility
+an instrument of control
+an instrument of power
+an instrument of power and control
+trying to control the flow of information
+the responsible thing to do
+an open system
+as an open system
+remember, in biology everything becomes toxic beyond some optimal point
+a kind of toxicity
+information overload
+information overload is a kind of toxicity
+we're talking past each other
+whatever you mean
+whatever I mean
+whatever you mean/whatever I mean
+the information available
+the information available to different cells
+logical hierarchy
+an uneven distribution of information
+criteria for mental systems
+as a criterion
+certain kinds of secrecy
+concurrence
+something I found in common
+several different cases
+the same common factor
+that common factor
+that common feature
+to try to determine what several cases have in common
+the fact of unknowing
+internal boundaries
+a knowledge of the whole
+the other side of that coin
+a certain necessary gradient of knowledge
+kinds of noncommunication
+changing the context of the interaction
+they change the context of the interaction
+reporting
+examples of noncommunication
+examples of unknowing
+formally comparable
+a general truth
+acquired characteristics
+apparently necessary
+the transmission of information
+prohibitions on the transmission of information
+if we were aware
+messages in human affairs
+these formal characteristics
+pathogenic
+the application of this notion to other kinds of systems
+trains of cause and effect
+the pathogenic process
+successful communication
+to communicate information
+damage to the system
+a maze of complex considerations
+tangles
+the context of a communication
+the message conveyed
+the relationship between the persons
+the problems of integration
+the problems of integration in the relationship
+a given truth
+the blockage
+the confusion
+a message in the network
+to shift contexts
+a state of integration
+the conscious knowledge
+to invoke familiar experience
+some desired sequence of events
+the behavioral sciences
+explanation in the behavioral sciences
+abductive pair
+what it is to have a mind
+what it is to be a mind
+into the process
+the human mental process
+the evolutionary process
+the formal objections
+news of an acquired characteristic
+no connection
+no connection can be imagined
+very important considerations
+what would be the effect?
+a hypothetical process
+an introduction of purpose into the system
+purpose will save time
+a shortcut
+the shortcut
+the proposed shortcut
+the root of the matter
+the sequence of actions
+the sequence of ideas
+the sequence
+a class treated as though it were one of its members
+a uniqueness treated as a generality
+a generality treated as a uniqueness
+the digital machinery of genetics
+the potentiality for change
+the total process
+this loss of flexibility
+formal analogy
+the conscious purpose
+the desired change
+an error in classification
+Adelbert Ames, Jr.
+epistemologically inaccurate
+processes of which you are quite unconscious
+your inner eye
+my mental processes
+the middle process
+the act of vision
+in the act of vision
+a method of investigating these presuppositions
+this difference in appearances
+the underlying picture
+mathematical regularities
+multiple events
+multiple events of communication
+communicating about communication
+the functioning of the biological world
+messages that might be said to have causal effect in the functioning of the biological world
+the system of premises
+constraints which characterize organisms
+constraints which characterize systems
+constraints which characterize systems and define their functioning
+affirmations of structure
+the communicative structure of the living world
+looking for both patterns and gaps in the weave
+the effort to describe its regularities
+artifacts of human perception
+artifacts of human perception and selection
+even biologists most objective data are artifacts of human perception and selection
+a description can never resemble the thing described
+the description can never be the thing described
+the thing itself
+immanent differentiations
+the systematic discrepancies which necessarily exist
+the systematic discrepancies which necessarily exist between what we can say and what we are trying to describe
+to attempt to describe
+single details
+in description
+general descriptive statements
+a repetitive structure
+some sort of regularity
+some sort of organization
+some sort of organization among parts
+the notion of some sort of generality
+algebra is the science that arises when the word "particular" is replaced by the word "any"
+that which is to be described
+structure is the algebra of that which is to be described
+structure is the algebra of that which is to be described; it is always at least one degree more abstract
+summary statements
+to distinguish between classes and groups
+it is important to distinguish between classes and groups
+it is important to distinguish between classes and groups in this context
+the members of a class
+the members of a group
+the members of a class/the members of a group
+some common characteristic
+each member
+members of the group
+the theory of biological evolution
+the available mathematics for describing groups
+structural relatedness
+some theory of structural relatedness
+phylogenetic history
+the phenomena of homology
+this discrimination between class and group
+common features
+in this language
+in this discrimination between class and group
+in this discrimination
+this discrimination
+the fore-and-aft sequences
+a modulation
+it is a class
+it is a group
+it is a class and a group
+interesting discontinuities
+interesting discontinuities of modulation
+interrelated
+the vertebrae
+there are interesting discontinuities
+there are interesting discontinuities of modulation
+all fit together and work together as part of a single whole
+the same ground plan
+that larger mystery
+fragments of a paradigm
+how the larger fabric is put together
+a false notion
+as we use the word
+our notion of structure
+the more concrete details
+the way we dissected the world
+the way we dissected the real world
+the way we dissected the real world in order to make our description
+we easily come to believe that the way we dissected the real world in order to make our description was the best and most correct way to dissect it
+certain formal characteristics
+halogens
+they share certain formal characteristics in modulated degree
+groups of elements
+the formal resemblances
+the classification
+the classification of the items
+the classification of the items is an artifact
+an act of nature
+criticism of this kind
+we run the risk of overcorrecting for that error
+there are no names in a purely physical universe
+structure immanent in their theories
+the structural statements of physicists and chemists refer only to structure immanent in their theories, not in the physical world
+the world of communication and organization
+the exchange of messages
+the anatomy of the spinal cord
+genetic processes
+messages from DNA
+summative
+the biologist's description
+this invocation
+several possibilities
+several possibilities for truth and error
+possibilities for truth and error
+this has several possibilities for truth and error
+this invocation has several possibilities for truth and error
+simply wrong
+successful as a base for prediction
+the system of communication
+the system of communication within the organism
+the system of communication among the organisms
+the description of it
+the language of DNA
+the classification of relations
+the classification of parts
+the classification of parts and relations
+he can be wrong in attributing to the system he is describing messages corresponding to those he uses in the description of it
+causing the course of events
+the course of events
+shaping the course of events
+our statements of structure
+statements of structure
+formally identical
+apical dominance
+message systems within the plant
+message systems within the animal
+message systems within the organism
+controlling messages
+to be more exact
+more exact
+the possibility of being right
+on the other hand
+being more profoundly wrong
+there is no communication
+to give the orders
+in biology, the developing embryo is always there to witness and critique its own development, to give the orders and control the pathways of change and response
+within the physical world
+the sequences of events in which physical entities engage are unorganized and therefore cannot be disorganized
+in physics/in biology
+error/pathology
+biological entities are organized, as opposed to merely orderly
+biological entities are organized
+a description made by a biologist
+biological descriptions
+the emission of the message
+the reports
+the injunctions
+the subject matter
+the subject matter of morphogenesis
+the subject matter of the control of behavior
+not to claim direct truth
+to be so limited
+possibilities of error
+possibilities for error
+ostensive communication
+the carrier of message
+more complex processes of interaction
+the internal organization of living things
+the process has regularity because it is itself about regularities
+the norms that life seeks
+the necessary weft
+the eternal verities of St. Augustine
+the concept of structure
+the concept of structure we have been using
+his eternity
+this habitual skepticism
+eternally true
+the nature of description
+no description is true
+it is perhaps true
+the processes of communication
+the processes of communication in the natural world
+connections that need not be stated
+self-evident truths
+the modern critic
+subsidiary propositions
+interlocking propositions
+if the axioms be granted
+if the axioms be granted, then the other propositions will follow
+defenses of faith
+seemingly a general truth
+the body's adjustments
+it is apparently necessary
+it is apparently necessary that we have no knowledge of the processes by which in our perception images are formed
+can these be compared to each other?
+can these two be compared to each other?
+kinds of necessary noncommunication
+the processes whereby we form mental images
+a basis for action
+as a basis for action
+the formal characterization of such messages
+under what circumstances these messages become pathogenic
+the application of the notion of noncommunication
+in some formal way
+a network of trains of cause and effect
+to describe in some formal way
+the local effect
+the local effect of the message
+a result of the relationship
+a result of the relationship between the message and the total system
+a result of the relationship between the message and the total system that is its overall context
+the disaster
+the pathology
+only in a part of the system
+to judge these cases
+the formal characteristics of sequences
+the asking of this question
+complex considerations
+prior state
+new information
+the part of the system that receives the new information
+only the beginning of the matter
+the complexities of the relationship
+the relationship between them
+relatively simple problems
+the possibility of a change
+a common substitute for explanation
+to discuss consciousness
+pretty leery
+until we understand
+until we understand more
+another similarity
+there's another similarity
+genetic information
+locally expressed
+you know that you know
+a related issue
+the snails in Hawaii
+reversed direction
+change produced by environmental stress
+the value of sexual reproduction
+the question is so much more complex
+how information moves
+how information moves within systems
+the special case
+consciousness as a special case of how information moves within systems
+the special case represented by consciousness
+in every cell
+every cell
+the fact of succeeding generations
+the shift in logical types
+change produced by environmental stress has to be local
+a higher logical type
+of a higher logical type
+genetic combinations
+effective genetic combinations
+the species
+workable adaptations
+preserving information
+accumulating information
+preserving and accumulating information
+the coming of death
+the effect is conservative
+the similarity between learning and evolution
+it fits in here somehow
+the logical type of the number
+if you had a machine that was capable of learning, how would you teach it?
+being right
+to have a need
+it's fairly obviously a mistake
+to dull the pain
+the different trains of thought
+the way in which people in our society are trained in the capacity to be bored
+to be subject to boredom
+real art
+a gnomic saying
+Faustian
+Faustian adjustment
+the general phenomenon of Faustian adjustment
+the general phenomenon
+magical control
+some kind of magical control
+getting some kind of magical control
+getting some kind of magical control in your own life
+the shortcut control
+acknowledging that you are caught
+getting out of addiction
+the other thing
+the other thing you probably need
+a given disaster
+the first two steps
+more powerful
+more powerful than you are
+your unconscious
+an immanent god
+the courage
+the courage to change
+the courage to change the things that I can
+easily corrected
+descriptions from data
+by remembering
+by remembering that
+this structure we project upon the outside world
+the outside world
+our own perceptions
+our own perceptions and thought
+this correction of epistemological dualism
+epistemological dualism
+correction of epistemological dualism
+it is more difficult
+it is more difficult to achieve
+it is more difficult to achieve this
+the vast mental process
+as real
+as real and as unreal
+to attempt a synthesis
+our fabric
+our fabric of description
+it is conspicuously full of holes
+our descriptions of life
+the totality of an organism
+an organism's message systems
+its own message systems
+listening only to what can be said
+mental ambiance
+the mental ambiance
+the interfaces between mental subsystems
+at the interfaces between mental subsystems
+at interfaces between mental subsystems
+that interface
+to see the context
+the thought
+the thought that would set us free
+their juxtaposition
+you can now stand off from the context in which you live and see that context
+the illusion
+the disillusion
+the illusion/the disillusion
+the constraints and responsibilities of the next order of control
+a complementary pair
+to provide a parable
+responsible for our choice
+our choice
+the relation between youth and age
+contemporary human beings in relation to the biosphere
+the need for responsibility
+a necessary component in the living natural history of every organism
+a essential component in human life
+the same contrast
+more conscious
+strange ideas
+a spin-off from
+a function of
+our mental ambiance
+a large class of interfaces between human mental subsystems
+it is the mechanics of illusion that we have to examine
+innocence/experience
+deluded respect
+deluded envy
+deluded respect/deluded envy
+the relation between the sexes
+professor of anthropology
+physical anthropology
+lectures on physical anthropology
+Alfred Haddon
+mental life
+this undercurrent of mental life
+these illusions
+the particular illusions
+the nature of the wider mental ambience
+hierarchic superiority
+the illusions which accompany hierarchic superiority
+some freedom
+some freedom from the illusions which accompany hierarchic superiority
+an elevated state
+previously unrecognized truths
+that state of mind
+the absolute certainty of death
+a new clarity
+appetitive drives
+liberation from appetitive drives
+the illusions
+to look through the eye
+the point of death
+at the point of death
+we have to remember
+ego values
+out of this attachment
+this attachment
+there is no intermediate step
+there is no intermediate state
+a necessary characteristic
+it is a necessary characteristic
+the premise of purpose
+ideas of purpose
+ideas of freedom
+ideas of purpose/ideas of freedom
+what is necessarily true
+an epistemological necessity
+epistemological necessity
+what little we can say
+an examination of the relation
+an examination of the relation between ideas
+an examination of the relation between ideas of purpose and ideas of freedom
+the separate notions
+a feeling of aloneness
+at the same time
+rich in liberation
+attachments of everyday life
+multiple worries
+multiple worries of everyday life
+the multiple worries of everyday life
+the drabness of everyday life
+my latest experience
+my latest experience of this
+my latest experience of this kind
+the fey state
+the sad time between
+old age
+an approach to death
+feyness
+a component in the barrier
+a difference in degree
+slowly to discover
+the problem of free will
+the problem of free will is irrelevant
+Margaret Mead
+partly free
+the words for these notions
+patterns of etiquette
+questions of purpose
+in reply to questions of purpose
+notions of purpose
+notions of durational time
+the calendar
+that frame of mind
+in a word
+a lack of freedom
+to complain of a lack of freedom
+poorly developed
+that frame of mind is absent
+that frame of mind is poorly developed
+ideas of time
+in the sense
+the answer to this question is not simple
+the rituals of death
+the cremation ground
+sapta
+free from disgust
+the rotting corpse
+making a show
+partly despised
+violent games
+the correct conventional behavior
+roughhouse play
+marked contrast
+in marked contrast
+the show of grief
+the Balinese
+he did not know how to conduct himself
+conventional attitudes
+in the presence of death
+the expression of grief
+the Hindu goddess of death
+Balinese mothers
+on the edge of logic
+an anthropological historian
+Isak Dinesen
+the context
+making the context
+making the context appear different from what conventional persons had supposed it to be
+contextual puns
+double bind
+European folklore
+fairy stories
+Kali-Durga
+Rangda
+Parvati
+the witch
+the sapta
+the mystic
+the schizophrenic
+the fool
+the prophet
+the trickster
+the poet
+a partial freedom
+the conventional world
+a partial freedom that sets them apart from the conventional world
+they all share a partial freedom that sets them apart from the conventional world
+lobotomy
+they played tricks with context
+great social occasions
+the definition of the context
+to assert a kind of freedom
+the ladder of sophistication
+as we climb the ladder of sophistication
+logical typing of context
+all that I have described
+pseudo freedom
+the mental world is necessarily marked and divided by many interfaces into many subsystems
+to understand the workings of the mental world
+to proceed step by step
+we can proceed step by step
+its vastness
+its detail
+these tricks
+the statements of structure
+the same rules
+related rules
+ecological climax
+a semistable system of maximum differentiation
+this last step
+the institutionalized schizophrenic
+instances of pathology
+we are ourselves exemplifying necessary characteristics of the network of mind of which we are parts
+we are, of course, ourselves exemplifying necessary characteristics of the network of mind of which we are parts
+that network
+it is that network
+it is that network of mind
+that network of mind
+network of mind
+something like ecological climax
+a semistable system of maximum differentiation, complexity, and elegance
+we look for contrasts
+the conditions of health
+the conditions for health
+the conditions for health of the larger network
+the barriers
+the barriers which must be maintained
+necessary characteristics of the network of mind
+the network of mind of which we are parts
+the network of mind of which we are parts, whose branches are immanent in us
+the glue
+how they can be classified
+contrasts that develop
+contrasts that develop as sophistication increases
+contrasts that develop or differentiate as sophistication increases
+we look for instances of pathology
+health of the larger network
+the participating subsystems
+where the participating subsystems suffer gross reduction
+failures of the system
+to do better
+long-lived subsystems
+whole long-lived subsystems
+interaction phenomena
+economic man
+his preferences
+the communicational problems of human cultural contact
+at the interface between two civilizations
+some degree of mutual understanding
+mutual understanding
+cases in which quantity displaces quality
+his mental processes
+considering the communicational problems of human cultural contact
+two strongly contrasting systems
+sharing a minimum of premises
+the establishment of a common ground of communication
+the more difficult
+their values
+their preconceptions
+one's own cultural system
+preference for one's own cultural system
+focusing on that common premise
+focusing on that common premise on which it is easiest to agree
+the meeting of civilizations
+a matter of commerce
+the necessary outcome
+the interfaces between two human cultures
+the interface between human societies and ecosystems
+gross reduction
+slow deterioration
+an occasion for profit
+jockeying for power
+the outcome
+the premises
+the premises of such encounters
+a shift of our ways of seeing
+the interpretation of messages
+a shift of our ways of seeing that would affirm the complexities
+a shift of our ways of seeing that would affirm the complexities and mutual integration of both sides of any interface
+what will it take to react to interfaces in more complex ways?
+our own complexity
+the systemic complexity
+the systemic complexity of the other
+an inclusive system
+a common network of mind
+elements of the necessarily mysterious
+the affirmation of the sacred
+a perception of both self and other
+the way we balance the complexities of freedom and responsibility
+the way we act
+within the context of the interface
+within the context of the interfaces
+within the context of the interfaces which always exist
+a larger mental system
+multiple encounters
+multiple encounters with other mental subsystems
+a certain possibility of wholeness
+questions of the encounter between minds
+even larger mental systems
+in this context
+encounters framed by even larger mental systems
+what are these other systems?
+what are these other systems we encounter?
+what are these other systems we encounter and how are they related?
+the riddle
+an ideal
+at least a dream
+at least a dream we may try to approximate
+a dream we may try to approximate
+the best answers
+our technologies
+our procedures
+our medical procedures
+our agricultural procedures
+our social arrangements
+best fit
+to best fit
+the best answers that we can give
+in context
+the label put on an experience
+the context of every action
+the whole network of epistemology
+the state of all the systems involved
+the history that leads up to that state
+what we believe ourselves to be
+what we believe ourselves to be should be compatible with what we believe of the world around us
+a religious hope
+a religious ideal
+the whole of science
+the whole of science and technology
+health practitioners
+some theory
+a mythology
+all those who act on living systems
+to be consistent
+to be consistent is excessively difficult
+to be consistent is excessively difficult and perhaps impossible
+professional life
+professional life as an anthropologist
+of first-class importance
+how we conduct our civilization
+the actual workings of living systems
+a major difficulty
+wry advice
+the riddle of the sphinx
+we should be careful what we pretend
+something like that
+some sort of self-fulfillment
+all organizations
+all human organizations
+all human cultures
+what people presume to be human
+what they will build in as premises of their social arrangements
+premises of their social arrangements
+what they build in
+to be learned
+a part of the character
+a part of the character of those who participate
+this self-validation
+this self-validation of our answers
+something still more serious
+there is a lag
+there is a lag in these affairs
+any answer
+any answer which we promote
+as it becomes partly true
+our promoting of it
+doubly cautious
+we must be doubly cautious
+making assumptions
+a nation of litigators
+pecuniary value
+in a state of flux
+how to answer
+our ideas about how to answer
+our ideas about how to answer the riddle
+our ideas about how to answer the Sphinx's riddle
+in extraordinary confusion
+we are in extraordinary confusion
+we are in extraordinary confusion at this very moment
+the rate at which things were changing
+at a pace
+rapid change
+undergoing rapid change
+our beliefs
+our beliefs are undergoing rapid change
+what is the language of the heart?
+what is in question
+the central theme
+we do not yet have another answer to the old problems
+we only know a little bit
+we only know a little bit about the direction in which the changes are taking place
+where the changes will end up
+in mind
+to have in mind
+a wide recognition
+a wide and compassionate recognition
+a wide and compassionate recognition of the storm of ideas in which we are all living
+we have to have in mind not an orthodoxy but a wide and compassionate recognition of the storm of ideas in which we are all living
+to find spiritual rest
+to find spiritual rest as best we can
+a flux
+a similar flux
+variously contrasting forms
+a revolutionary period
+evolution and revolution and religion should go together
+religious freedom
+defining answers
+human nature is self-validating
+the beginning of a new solution
+a new solution
+the new understanding
+the conceptual separation between mind and matter
+the conceptual separation between mind and matter we be seen as a by-product of an insufficient holism
+when we focus too narrowly on the parts
+when we focus too narrowly on the parts, we fail to see the necessary characteristics of the whole and are tempted to ascribe the phenomena resulting from wholeness to some supernatural entity
+and so on
+the bedside manner
+men have hoped for holistic solutions for a long time
+the tendency in nature to produce wholes from the ordered grouping of units
+the systematic thinking
+nonsupernatural
+nonsupernatural meaning
+precise meaning
+formal meaning
+the early contributors
+the early contributors to this
+the early contributors to this thinking
+the formal relations between information and organization
+Claude Bernard
+Clerk Maxwell
+thinking about the formal relations between information and organization
+Russel Wallace
+Alfred Russel Wallace
+the pathologies of the body
+the inner physiological organization of the body
+a matter of message transport
+holist
+an early holist
+the inner ecology of the body
+biology
+parts of biology
+the idea
+the response to that idea
+contemporary thinking
+not at all unfamiliar
+the next step
+to predict
+to predict that
+the next twenty years
+within the next twenty years
+a type of credibility
+a type of credibility that will be pervasive
+a type of credibility that will be pervasive in the society
+the man in the street
+both scientist and layman
+both doctor and patient
+we are learning
+wholes made up of units
+wholes made up of units connected together
+wholes made up of units connected together by communication
+as if it had a mind
+a living thing
+the word "holistic"
+much more precise meaning
+this new meaning
+this precise meaning
+occidental culture
+certain characteristics
+certain characteristics of systems
+the characteristics of systems
+the ability of living things to store energy
+a change in some sense organ
+a change in some sense organ may trigger the release of stored energy
+thinking about purpose
+thinking about pathology
+a condition of our time
+the field of cybernetics
+the field of information theory
+the field of systems theory
+the conventional ways of thinking
+the receipt of news
+the receipt of news of a difference
+news of a difference
+receipt of news of a difference
+release of stored energy
+the release of stored energy
+information processing
+everything that we say
+everything that we think
+what we say about mental process
+what we think about mental process
+the phenomena of mind
+the phenomena of mental process
+message material
+message material from DNA
+the mental organization
+the mental organization of the body
+a part of the holism
+these new tools
+if we approach the phenomena of mind with these new tools
+the new ways of thinking
+a self-recursive communication system
+may be aware
+its own function
+the assertion
+a bridging answer
+types of awarenesses
+other types of awarenesses
+many other types of awarenesses
+that awareness
+an awareness of beauty
+in the larger system
+in the larger and more inclusive system
+the disciplines of the new ways of thought
+the disciplines of the new ways of thought are still to be defined
+to believe
+to believe and act in the belief
+to act in the belief
+to act in the belief that
+to believe and act in the belief that
+to believe that
+to accept a new discipline
+it is to accept a new discipline
+double question
+to believe and act in the belief that there is no mind distinct from the body and no body distinct from the mind
+the body-mind
+this brings me back
+in all seriousness
+seriousness
+those who deal with living systems
+all those who deal with living systems
+the responsibility of all those who deal with living systems
+a dream
+a responsibility to a dream
+what sort of a thing man is
+what sort of a thing man is that he may know and act on living systems
+the joy of life
+the joy of life and loving
+to shape that dream
+deep unconscious philosophies
+to become that which we pretend
+the myths in which our lives are embedded
+what sort of a thing man is that he may know and act on living systems and what sort of things such systems are that they may be known
+the shape our culture imposes on us
+to take the shape our culture imposes on us
+to take the shape and character our culture imposes on us
+to take the character our culture imposes on us
+the character our culture imposes on us
+matters of faith
+essentially religious
+these myths
+the future forms that these myths may take
+mythopoets
+the dynamic myths
+what is man?
+what is man, that thou are mindful of him?
+a little lower than the angels
+his version
+his version of the riddle
+a set of ideas about the nature of mental process
+ideas about the nature of mental process
+ideas derived from cybernetics
+the basis of a new understanding
+people would act differently
+sensitivity to natural systems
+the development of this sensitivity to natural systems
+he was convinced
+another subject
+very tentative
+a book about the process of thought
+to understand the direction
+mental process/thought process
+groping
+a foreign mental landscape
+the ways of thought
+different premises
+the study of another species
+to shift gears
+the shifting of gears
+the adjustment of preconceptions
+knowledge necessarily depends on preconceptions which may sometimes be examined or altered
+anthropological issues
+central anthropological issues
+the conceptual world
+to enter the conceptual world of another culture
+in some measure
+a strange society
+an exotic language
+a few words of an exotic language
+a concept that has no place in Western thought
+some of these terms
+an entire interlocking system
+an explanation of an entire interlocking system
+the physical form
+the physical form of their world
+spatial relationships
+relations between persons
+the investigator
+the world of their thought
+to practice more than one mode of thought
+to practice more than one mode of observation
+anthropologists
+total seriousness
+ostensibly
+ostensibly objective
+recording instruments
+explanations of ordinary life
+symbolic elements
+kinds of symbolic elements
+ordinary life
+between these two extremes
+the communist menace
+sex appeal
+these different kinds of discourse
+the ethnographer
+human events
+human interactions
+the causation of observable patterns of behavior
+causation of observable patterns of behavior
+observable behavior
+those variables that can be isolated in the laboratory
+the idea of the symptom
+the idea of medication
+human events and interactions
+pain as we experience it
+pain as we experience it is itself an idea
+pain as we experience it is itself an idea, a kind of mental image
+diversity of reference
+in the movement back and forth
+the pangs of illness
+the clink of silver
+author: Gregory Bateson
+unmocked god
+mental systems of ecological size and larger
+mental systems of ecological size
+these large mental systems
+these large mental systems are characterized by constraints on the transmission of information between their parts
+these large mental systems are characterized by, among other things, constraints on the transmission of information between their parts
+large, organized systems
+the existence of that whole
+to assert the existence of that whole whose integrity would be threatened by inappropriate communication
+to think in terms of organizations of this size
+to think in terms of organizations
+it is necessary for explanation
+it is necessary for explanation to think in terms of organizations of this size
+characteristics of mental process
+criteria of mental process
+the criteria of mental process
+to claim that this is necessary
+to claim that this is necessary and not surprising
+such a vast organization
+what sort of mind such a vast organization would be
+such minds
+such vast minds
+derived from human models
+what we claim to know about cybernetics
+what we claim to know about systems theory
+the vast organized system
+capable of humor
+capable of error
+capable of deceit
+capable of mental pathology
+capable of perceiving beauty
+capable of perceiving ugliness
+the organs of sense
+capable of failure
+capable of frustration
+capable of consciousness
+historical religions
+the great historical religions
+to define a region
+these two characteristics
+two characteristics
+a recognition of a unity
+a recognition of unity
+in the asking of questions, there will be no limit to our hubris
+a recognition of a certain unity in the total fabric
+if we can show that a recognition of a certain unity in the total fabric is a recurrent characteristic
+some of the most disparate epistemologies that human culture has generated
+in that culture
+the first sin
+to conclude the sequence
+the sequence of anangke
+the sequence of necessity
+ngglambi
+a person's ngglambi
+the black cloud
+black ngglambi
+human individuals
+the larger system
+themes of Greek drama
+shared ideas
+that complex corpus of shared ideas
+the Oresteia
+a sequence of myths
+the concept of anangke
+Laius
+the masked figures
+the present discussion
+the stuff of which we are made
+how the world is
+not communicating something under some circumstances
+communicating/not communicating
+examples of the same phenomenon
+there is a secret
+the fact that there is a secret
+concealing the fact
+concealing
+concealing the fact that there is a secret
+noncommunication of certain sorts is needed
+communication would somehow alter the nature of the ideas
+the precise contexts
+used as a marker
+the un-uttered
+the working together of the whole
+why does it matter?
+if we are told
+if we are told that Scheherazade told a tale of fantasy, we are tempted to believe that she, at least, is real
+we are tempted to believe
+tempted to believe
+the habit of photography
+sacred
+redefinition of context
+the whirlwind
+we've been trained to be subject to boredom
+no discipline
+no discipline required
+requiring no discipline
+an increase in addiction
+increase in addiction
+classes of shortcut
+classes of shortcuts
+you have an alternative
+getting out
+feeling caught
+you get caught
+the endorphin story
+the level of disaster
+the level of disaster you need
+the two first steps
+there is a principle
+some sort of double surrender
+a sort of equation
+god is identified with your unconscious
+a famous prayer
+double-sidedly open
+it's double-sidedly open
+the same picture
+at the first stage
+in my own voice
+it must happen all the time
+Oppie
+Robert Oppenheimer
+every move that we make
+two sides
+two sides, and you have to deal with both
+dolphin training
+to mitigate the pain
+the disruption of the second-order adaptation
+transcending double-binds
+a something
+the need to get beyond talking as if there were a something that existed inside the single individual
+the fact that mental characteristics are relational
+just habit
+in order to get an adaptation
+you have to have an A and a B
+first-level learning
+continuous first-order change
+you need a wider learning at the next level
+you need a wider learning at the next level to deal with the fact of the changing context
+a different kind of wisdom
+a different kind of courage
+dogmatically atheistic
+to trigger reflexive misunderstanding
+likely to trigger reflexive misunderstanding
+addressing new questions
+the overall argument
+contribution to the overall argument
+a distinctive pattern
+a distinctive pattern of relationship
+public dialogue
+arguing our way toward clarity
+my own style of interaction
+this was a gradual process
+father
+daughter
+these metalogues
+stories he told repeatedly
+conversation is always moving between intellect and emotion
+a reminder that the conversation is always moving between intellect and emotion
+always moving between intellect and emotion
+always dealing with relationship and communication
+always dealing with relationship and communication, within and between systems
+the integration had to be tested
+the integration had to be tested again and again
+skeletal
+the entire living planet
+invoking the conceptual tools of cybernetics
+framed in precision
+an understanding
+as a coherence emerged
+as coherence emerged
+as coherence emerged and discord was eliminated
+the universal minima
+parts of necessity
+the universal minima of the overlapping of all these fields of study
+higher levels of order and organization and sense
+untrained in verbal precision
+those untrained in verbal precision
+the context of science
+at the time of his death
+necessary distance
+concentrated work
+concentrated work and creative thought
+a valuable perspective
+already under way
+it has not seemed to me urgent to rush this work forward
+for my own part
+to respect the warning
+to rush in
+not to rush in
+not, as a fool, to rush in
+specialist audiences
+aware of the potential for integration
+shifting contexts
+a new effort of communication
+that integrative dimension of experience
+great trepidation
+a matter he approached with great trepidation
+he saw the potential
+to trigger
+obscurantism
+division
+division as opposed to unity
+requiring a different kind of courage
+a testament
+all those prepared to wrestle with such questions
+a number of traditions
+preparing this
+in preparing this
+the most obvious alternative
+the title of the book
+to merit that kind of attention
+the preservation of the sources
+some hesitation
+after some hesitation
+scrupulosity
+previous publications
+amanuensis
+the role of amanuensis
+knowing
+his knowing
+a distinctive pattern of relationship and conversation
+significant additions
+to articulate his own thinking
+when I made significant additions
+to allow himself
+to allow himself to articulate his own thinking
+less fictional
+he never defined what he was doing in relation to me
+a character
+quite at odds
+my understanding of the issues
+his original requirement
+the father-daughter relationship
+basic premises of this civilization
+a first step
+a first step towards a solution
+this way of looking, which sees the mental as organizational and as accessible to study, but does not reduce it to the material
+one of the key ideas
+kinds of systems of thought
+outside the body
+lineal causality
+the premise
+intolerably narrow
+in truth
+the opposite fallacy
+so heartless
+central to
+at the root of
+Mercutio
+we know enough
+this stance
+the false impression which, it seems, I give
+practitioners of the improbable
+my sense organs
+to believe that is itself a form of superstition
+the image of the tree
+kinds of explanation
+this sequence of events
+what they hope for
+materialistic science
+neatly defined
+quantitative physics
+a ritual imitation
+a ritual imitation of an animal
+his purpose
+an evolutionary development
+out of sympathy
+in community life
+certain kinds of causal chains
+the difficulty in all of this
+another form of superstition
+it must be remembered that at least half of all ideation has no referent in a physical sense whatsoever
+the food of worms
+the layman
+facilis descensus Averno
+belief in certain kinds of superstition
+different kinds of validity
+beliefs which are shared
+both beliefs
+such dichotomies
+physical explanations
+in the seventeenth century
+supernaturalism
+among the most successful
+I am sure that it was no accident
+cavil
+the two ideas are intimately related
+as a device
+this act of subtraction
+the other half
+not usually stated
+a purely material notion
+the materialist superstition
+both are nonsense
+a basic premise
+one of the factors
+the same universe of discourse
+a basic contradiction
+analogic concepts
+descriptions of mental process
+the emphasis
+men's thought
+systematic investigation
+Samuel Butler
+their central thesis
+by the nineteenth century
+secular reason
+thinking about thought
+conventional views
+less cogent
+neither of these two modes
+for lack of a better word
+the material
+the truth of that statement
+the world of living things
+in the world of living things
+the prebiological universe
+physical causes
+a set of descriptive propositions
+its vocabulary
+its syntax
+its epistemology
+to resolve this question
+to make descriptive propositions
+it is less obvious
+his first error
+to be the interface
+a device
+already known
+Defined
+to be compared
+the basic epistemology
+a more exact translation
+comparing forces
+these are very different concepts
+the paradox of the boundary between the mental and the physical
+the true nature of sense organs
+epistemological fallacies
+this is not my only purpose
+this is not my principal purpose
+when some of the nonsense is cleared away
+romantic supernaturalism
+a humility
+the validity of our mental processes
+abstract philosophy
+the domain of mental explanation
+a series of narratives
+a certain struggle
+spontaneity of feeling
+to map out what sorts of thought are bad for spontaneity
+a much more profound question
+part of religion
+two sorts of questions
+at some length
+an anthropologist
+a place where you belong
+this strange place
+places in the world where men gather
+the sense of the meaning
+the reverence
+to show what is to be protected
+that changing of its context
+what I mean by religion
+to show what is to be protected from various kinds of defilement
+part of the story
+the central fulcrum
+singularly moving
+the water snakes
+another logic
+at moments of change
+a sudden realization
+the world in which I live
+a heavy story
+the decorum
+do aesthetic factors play a role in changing what animals and people do in their relationships?
+being unreasonable
+a worldly view
+something useful
+something interesting
+the setting of the stories side by side
+I will try to spell out the questions
+a sequence of actions
+unaware
+it is only a story
+it is only a poem
+it is only a work of art
+it is only a parable
+there is a story
+sensible men
+mythical figures
+similar questions
+chapter: IX: Defenses of Faith
+I wanted the point to remain implicit
+the proceedings of a court of law
+a rite
+only a story
+only a poem
+only a work of art
+structure/process
+what goes on in the biosphere
+the flux of events
+the flux of events which is held within limits
+the flux of events which is held--for the moment--within limits
+Thomas Young
+Thomas Young (1773-1829)
+an irony
+the Procrustean model
+physical energy
+liveliness
+excitement
+motive
+emotion
+the conservation of energy
+human vigor
+the interaction between structure and process
+a model of the interaction between structure and process
+the problems of knowledge
+the problems of description
+a model
+a vocabulary of relations
+relations
+relations within the model
+sufficiently precise
+to provide a language sufficiently schematic and precise so that relations within the subject that is being modeled can be examined by comparing them with relations within the model
+the discussion of relations
+the relations between the parts
+precise talk about relations
+when we have a vocabulary of relations
+the subject which is being modeled
+these specific questions
+the tool of abduction
+drawing from phenomena in different fields that which is shared of them
+comparative
+comparative study
+comparative study of different fields of phenomena
+human history
+the relations which it contains
+the circularity
+the circularity of the chains of causation
+the simplest familiar example
+the bias
+the bias of the system
+not controlled
+the middle range between thresholds
+error activated
+this falsification
+how we know what we think we know
+the culture in which we live
+appetitive orientation
+at the interface
+the remainder of the system
+sense organ
+efferent pathways
+the ecology of this system
+the epistemology of this system
+the setting of the bias
+the set limits
+this assertion
+a gap
+this gap
+the upper limits
+the lower limits
+on-off
+a digital, on-off mechanism
+that which is to be controlled
+at a point
+continuously varying
+the value of the variable
+the value of the variable which we seek to limit
+analogic devices
+analogic measurement
+Cratylus
+the circular quality of the sequence
+an alternative format
+only one component
+varying the bias
+the subsystem
+a sample
+events in the larger system
+hierarchically organized
+a hierarchically organized, self-corrective system
+its sense organ
+carryover
+in the form of a difference
+an adaptive action
+Horst MittelStaedt
+MittelStaedt
+the use of error correction
+Transactions of the Fifth Conference on Group Processes
+a complex aggregate of information
+a minimum of error correction
+the calibration method
+the single act
+a large sample
+the use of a large sample of acts
+the use of a large sample of acts to achieve a better setting or calibration of the internal mechanisms of response
+information of a different logical type
+higher logical type
+the class
+the class is of higher logical type than its members
+repeated experience
+prolonged practice
+Zen discipline
+change in calibration
+different types of learning
+a sequence of cycles
+a sequence of experiences
+longer practice
+in medias res
+the economics of habit formation
+logical type differences
+a long-term change in the system
+a change in structure
+a second logical level
+a long-term change in the system that will affect future events
+a coherent theory
+to construct a coherent theory
+zero-learning
+the simplest case
+the firing of a single sensory end organ
+complex chunks of information
+internal learning
+all events in which some organism receives information
+processes of learning
+the characteristics of the processes of learning
+changes in interaction
+different parts of mind
+changes in interaction between different parts of mind
+this wide definition
+different kinds of learning
+habit formation
+addiction
+adaptation
+grouping together
+distinguishing between different kinds of learning in terms of logical type
+change
+change in systemic characteristics
+change in systemic characteristics as a result of experience
+form affected by flux
+structure affected by process
+some previously defined goal
+in organisms
+hysteresis
+this definition
+book: Steps to an Ecology of Mind
+purely physical phenomena
+Chladni
+Chladni figures
+patterns of vibration
+hysteresis of resonance patterns
+Karl Pribram
+a pattern of resonance
+an easy way out
+a three-dimensional neural network
+the reception of information
+other contexts
+in other contexts
+our definition
+our definition of learning
+our definition of information
+the physical changes
+the physical changes involved in learning
+the physical changes involved in learning within organisms
+nonorganic learning
+the occurence of triads
+the study of learning
+a triad of events
+a relation
+a relation between two components
+in the present context
+this triad
+stimulus, response, reinforcement
+stimulus, response, and reinforcement
+all examples of learning
+any message
+any experience
+an association
+a linkage
+an association between any other two or more components
+an association between any other two or more components in a sequence of interaction
+how sequences are punctuated
+a relation between two or more events in a sequence
+relations between items
+items/relations between items
+relations between actions
+associations between actions
+a matter of learning
+in the larger sequence
+learning as change in calibration
+to present this problem
+conscious self-correction
+this kind of shift of logical types
+kinds of experience
+to discover what it is to hold something sacred
+mechanists
+the problem is not entirely symmetrical
+practitioners of the the improbable
+a miracle
+an internally contradictoryy opinion
+in principle
+the receipt of information
+that superstition
+partly aware
+statements of unity
+a statement of integration
+often dimly recognized
+some extrovert purpose
+intermediate cases
+more primitive
+the earlier condition
+decadence of this kind
+community life
+the education of children
+the sense in which ideas and images do participate in certain kinds of causal chains
+material arrangements
+the idea of Santa Claus
+very simple forms
+the living creature
+how great thy use
+how great thy blessing
+the ground every figure must have
+a physical sense
+what my friends want me to believe
+human opinion
+pleased surprise
+people do not easily distinguish between changes in the self and changes in the world around them
+an experiential basis
+of interest
+the descent to hell is easy
+Koestler
+patterned information
+certain kinds of superstition
+to reinforce that belief
+the ethnography of shamanism
+one of their principal characteristics
+the established system
+two basic beliefs
+fundamental beliefs
+fundamental and erroneous beliefs
+a strange fact
+modern superstition
+splits
+explanatory principles
+to represent two or more interacting variables
+by the pricking of my thumbs
+that other half
+that other half which could more easily be explained
+on the other side
+purely material
+the physical
+verbal clich?
+to end systematic investigation
+the reformation
+there is no such thing as a class
+the statement
+what is at issue
+there are no messages or classes in the prebiological universe
+materialism is a set of descriptive propositions referring to a universe in which there are no descriptive propositions
+to describe our activity
+to describe our activity in description
+a very different matter
+measuring ratios
+detecting subtractive difference
+the true nature
+a new kind of unity
+why placebos?
+human life
+human healing
+human suffering
+differences can be causes
+partly predictable
+material effects
+sequences of cause and effect
+a great deal happened
+deep compassionate humor
+it might also have the opposite effect
+our new wish
+to make a nation
+to make a world
+a lag
+a floating devotion
+to fit
+to fit together
+how things fit together
+almost every culture of the world
+the pieces
+not tell
+not tell himself
+not tell anybody
+many examples of the same phenomenon
+he must conceal the fact that there is a secret
+examples of necessary noncommunication from the field of biology
+other parts of the system
+at this moment in our history
+the Job story
+to limit knowledge
+six criteria
+something like secrecy
+an uneven distribution of information within a given system
+to be revealed
+revelation
+one of the ways two events could be linked was by knowledge
+what isn't so smart
+others that share the same common factor
+to try to determine what several different cases have in common
+prohibitions
+to define the formal characteristics
+these messages
+how any given message is located in the network
+a result of relationship
+a result of relationship between the message and the total system that is its overall context
+as trivial
+in a part of the system
+tangles of the relationship
+the possibility of change
+credibility
+a substitute for explanation
+the road to explanation
+a useful abductive pair
+phylogenetic evolution
+individual mind
+it is no doubt correct
+not relevant to the problem
+plenty of evidence
+the age of the earth
+something like purpose
+the resolution
+the root of the matter is an error in logical typing
+somewhere in the sequence
+somewhere in the sequence of actions
+somewhere in the sequence of actions and ideas
+a large variety of cases
+in a large variety of cases
+a class
+as an ordered class of states
+to think of a process as an ordered class of states
+to think of a change as an ordered class of states
+as though these words could be meaningful
+the individual creature
+under environmental conditions
+what is to be inherited
+what is crucial
+if the hypothesis were true
+the parent
+more unconscious mental processes
+consciousness is necessarily very limited
+almost no control
+that creative process
+the middle process by which the images are formed
+arriving at a recognition of the importance of these presuppositions of which we are normally unaware
+depicted as
+the underlying premise
+in the reverse direction
+your machinery of perception
+how you perceive
+a system of presuppositions
+other presuppositions
+a whole series of presuppositions
+if things appear to overlap
+if similar things appear to be of different sizes
+the images we experience
+what is going on in our own minds
+we think we see, but actually we create images, all unconsciously
+what is it to think?
+relying on presuppositions of which we are unaware
+reaching such a conclusion
+that jump
+another deep epistemological generalization
+two subjects
+the Latin
+the event of thinking
+in the simplest case
+the neural impulse
+every message is both command and report
+Warren McCulloch long ago pointed out that every message is both command and report
+there are gaps in the process
+aggregates of propositions
+an unawareness of the gaps
+at first glance
+the gaps
+the jump
+the causal sequence
+mystification
+an act of faith
+conscious inspection
+the processes of perception
+loss of faith
+faith
+faith is in believing that seeing is believing
+platitude
+there is no time more than a little consciousness
+formally analogous questions
+formally analogous questions about larger systems
+more subtle
+more coercive
+the aggregate of presuppositions
+groups with only two members
+that which is outside awareness
+systems of presuppositions
+young men in a hurry
+to understand the processes
+judgments of value
+interactional conservative devices
+the most instructive
+the most fundamental
+we forget so easily
+viability of communication
+viability of interaction
+the necessary condition
+at the cellular level
+the moment of fertilization
+at the moment of fertilization
+biological presuppositions
+this first test
+the relations between presuppositions
+a greater complexity
+sexual fusion
+networks of propositions
+related but never totally similar networks of propositions
+a little variation
+a limited amount
+a limited amount of variation
+one component of the picture
+presuppositions
+the items of presupposition
+preconceptions
+the second pathway
+the second pathway of increasing complexity
+the way systems are nested within systems
+related presuppositions
+nondyadic
+settings of the bias of the system
+another order of change
+the facts of learning
+the facts of learning and teaching
+the mechanism of cultural transmission
+cultural transmission
+parents learn from and are as much changed as their children
+the complexity of phenomena
+always oversimplified
+let us not pretend that mental phenomena can be mapped onto the characteristics of billiard balls
+I am generally pretty leery of the subject
+there is also a shift in logical types
+there is also a shift in logical types, because consciousness means you know that you know
+so much more complex
+the standard vulgarization of the myth
+the direction of the spiral
+in the opposite direction
+genetic drift
+genetic divergence
+one kind of stability
+at the species level
+at the ecosystem level
+daddy
+how we act in the world
+a double set of illusions
+as you know
+it is less clear
+it is we who make the images
+in part
+what we intended
+our output
+our input
+the same mistake
+the general fact
+the experience of one's own actions
+intensity dimensions
+accessible to experiment
+these characteristics
+more difficult to think about
+striped muscles
+unstriped muscle
+involuntary
+the relationship between structure and flux
+what a model is for
+formal possibilities
+boundary of subsystem
+good enough to play with
+an aggregate of events
+a crucial event
+from structure to flux
+a setting determining an event
+the next level up
+at the next level up
+a phenomenon of higher logical type
+anywhere in the system
+the entire system
+relationship between subsystems
+both knowing and not knowing what they are looking for
+to recognize the experience
+and recognize the place for the first time
+one had it all wrong
+I just saw it
+it was an experiment
+a necessary sort of control mechanism
+reversing that arrow
+nonappetitive
+two ideas
+synchronic time
+diachronic time
+a synchronic time
+a synchronic change
+the change
+a subject of conversation
+a subject of explanation
+they had a wider view
+as part of a system
+to see myself as part of a system which includes me an the chaparral
+a reason for my action
+synchronic action
+some complex truth
+a great many propositions
+a great many propositions of lower logical type
+different kinds of propositions
+at a very deep level
+the whole range of potentialities
+the human capacity to learn
+premises
+to change
+subject to change
+the phenotypic
+at the next level of abstraction
+this would seem exceedingly unlikely
+when we are dealing with a creature subject to learning
+the question we have to ask
+the question we have to ask is the logical type of the specification provided by the genotype
+a major question we have to be aware of
+a major set of questions we have to be aware of
+blood sugar
+the American Museum of Natural History in New York
+it was skewed
+the growth of the clam
+a direct reference
+is it more probable?
+a substantive
+the genotypic messages
+the environmental impacts
+chelae
+components of the phenotype
+the description of phenotype that best reflects the injunctions of genotype
+in the biological world
+the behavior of entities in the biological world
+sharply compelling
+in this gestalt
+nematodes
+genotypic determinants
+a certain threshold
+a certain threshold value
+the crystallization point
+the crystallization point for the new gestalt
+I have for a long time felt an uneasiness
+I have for a long time felt an uneasiness about what is meant by the concept of a question
+at a deeper level
+an answer to the question
+one pathway
+to fix the value of any variable
+a qualitative change
+much more complex
+homeostases
+some continuous change
+some external event
+some external condition that can be made into an event
+that state of tension
+a patterned sequence
+the signal
+a high signal/noise ratio
+the breakdown of control that occurs when quantities become too great
+statistical response of smaller units
+another necessity
+the relation across an interface
+a sense organ
+a relation between input and sensation
+especially precise
+Selig Hecht
+the retina
+the interfaces between environment and nerve
+efferent
+the same relation
+afferent
+quantitative knowledge
+an individual cell
+neural impulses
+the frequency of neural impulses
+in the widest sense
+a threshold
+a threshold value
+understanding the process of perception
+the news
+the intensity of the input
+very great sensitivity
+very great sensitivity to very small inputs
+Wiener
+the details of this finding
+such precision
+the biological
+all perception
+as a percentage
+more sensitive to difference
+less sensitive to difference
+a deep difference
+continuous variation
+continuous variation in a quantity
+a statistical device
+in special relation
+the single neuron
+the frequency of response of the single neuron
+transformations in quantity
+it was not good enough
+a skewed curve
+purely physical characteristics
+the transformations in quantity
+the transformations in quantity imposed by the Weber-Fechner relation
+forms of nonsense
+logarithmic relation
+the communication systems of the body
+the empirical facts
+human communities
+providing what is needed
+the modern West
+the epistemologies of different human communities
+a nice problem
+one of the big ones
+civilizations
+how one goes about thinking about something like this
+a few of the pieces
+quite a few of the pieces
+other bits
+the arms race
+it forces you to decide
+research money
+a machine that was capable of learning
+one of the things that is important in depression is not to get caught in the notion that entertainment will relieve it
+art
+the effort precedes the reward
+entertainment
+to talk about formal questions
+the shift of attention
+two parts
+two parts of a system
+we need to think in terms of two parts of a system
+we need to think in terms of two parts of a system, with some kind of interface between them
+one of the parts
+one of the parts is nonliving
+the characteristics of the larger whole
+this larger whole
+a component part
+to examine the characteristics of a larger whole
+the whole
+the whole that I call me
+some part of the system
+the loss of some part of the system
+an alternative term
+how functioning is possible
+the unit of survival
+the interdependent parts
+the interdependent parts of a whole
+some kind of cost
+our model
+acclimation
+real solutions
+you're dependent
+an escalation
+the heating system
+changing the bias
+the need
+a need for the next step
+the political process
+I want to try out an idea
+creating a need
+to do some thinking
+as argument
+as evidence
+large mental systems
+constraints on the transmission of information between their parts
+the mentality of the single human being
+organizations of this size
+to claim
+to claim that this is not surprising
+kinds of mentality
+human models of mentality
+human characteristics of mentality
+this vast organized system
+limitations of threshold
+limitations of attention
+human culture
+the Greek idea of necessary sequence
+impersonal
+the initial act
+human emotions
+human motives
+the Hindu idea of karma
+similar conceptions
+mental systems/mental subsystems
+less reified
+another mental characteristic
+side by side
+Oresteia
+a sacred serpent
+a specific act                          i
+repeated episodes of trouble
+Colonos
+Antigone
+to note a formal contrast
+the culture of classical Athens
+different obligations
+different privileges
+Oedipus at Colonus
+the Colonos
+the city of Athens
+to illustrate this
+my suspicion
+this double expression
+more astonishing
+a more astonishing example
+an incarnate deity
+double myths
+large cultural systems
+the larger mentality
+what seems a larger mind
+the arrogance of power
+these principles
+these more mysterious principles
+Balinese religion
+validating the existence of very large systems
+advances in epistemology
+human religions
+to reverse the trend
+scientific authority
+religious people pretending to scientific authority
+scientific debunking
+the failure to understand
+the book of Genesis
+on our part
+the scientific findings
+I've used a combination of approaches
+the form of the argument
+a parable
+a unity in which we make our home
+to find what might appropriately be recognized as sacred
+a large number of rules
+kinds of steps
+kinds of sequences of steps
+different species
+different species of syllogism
+the different types of syllogism
+a natural history of the world of communication
+the relations
+the relations in any self-correcting circuit
+the presence of such circuits
+one of the criteria by which I define a mind
+variations
+formal logic
+the metaphorical connections
+the properties of the self-corrective circuit
+this is the first step
+in the description of life
+there are inevitable limitations on any act of description
+unifying ideas
+draw the connections
+McCulloch's mother
+the story of McCulloch's mother
+false analytical distinctions
+the same conversation
+to get matters that had been separated in the past into the same conversation
+a syntax
+the chunks of different kinds of material
+connecting remarks
+little connecting remarks
+that tension
+that is an important kind of difference
+producing uncertainty
+limiting uncertainty
+notions of transcending paradox
+the concept of the double bind
+the logical types
+any no-win situation
+vulgarized
+thought breaking down
+relations between relations
+relations between relations between relations
+our thinking is limited
+a regress
+how far we can go
+possible types of cognitive error
+all possible types of cognitive error
+the analogy
+when something goes wrong
+when something goes wrong in epigenesis
+a nonviable organism
+the moment of the error
+the society
+the notion of original sin
+a more complicated history
+lit. crit.
+a sort of nickname
+proofs in geometry
+to care about consistency
+learning about integration
+an ancient ecosystem
+looking at a work of art
+looking at a very tightly integrated logical system
+my best students
+Roman Catholics
+learning that consistency is important
+that's an important one
+the falsehood
+Skip Rappaport
+a series of links
+humility
+what did I say to that?
+the idea of insider and outsider
+the realm of peace
+the realm of war
+that boundary
+boundary
+you cannot construct something and designate it as sacred
+the focus of conflict
+a god
+the focus of mistrust
+that's wrongly said
+certainly not
+in terms of trust
+the idea of transcendence
+the dualism
+addiction or even pathology is the other face of adaptation
+talking about the sacred
+this planet
+the notion that this planet is a living organism
+the condition of the planet
+the condition of the planet can only be explained by the processes of life
+warning against
+the capacity to form new connections
+all knowledge has gaps
+mental process includes the capacity to form new connections
+self-healing tautologies
+the total fabric
+the planet
+it's different
+the physical reality
+to think about mental process
+the interconnections
+the interconnections are not entirely tight
+the logic of mental process
+the connectedness
+the structure in the fabric
+the term structure
+the world of flux
+particularly interested
+describing injunctions
+describing commands
+the communicative fabric of the living world
+looking both for patterns and for gaps
+looking both for patterns and for gaps in the weave
+a description can never be the thing described
+recorded data
+looking at the natural world
+systematic descrepancies
+the systematic descrepancies
+what we can say
+what we can say/what we are trying to describe
+any map
+the difference between map and territory
+what we have observed
+calling something structure
+uniting the parts
+organization among parts
+one at a time
+making a statement
+single
+aggregate
+single/aggregate
+the algebra
+the algebra of that which is to be described
+more abstract
+one degree more abstract
+summary
+some of the infinite details
+describing groups
+mathematics for describing groups
+relatedness
+evidence of phylogenetic history
+the fore-and-aft sequence
+discontinuities
+discontinuities of modulation
+interrelated in a third way
+ways of a group
+possible ways of a group
+the possible ways of a group
+as part of a single whole
+they all fit
+they all fit together
+a small piece of that larger mystery
+the organization of the biosphere
+fragments of paradigm
+more concrete details
+a more problematic aspect
+all halogens
+a group
+to share formal characteristics
+this is quite unreal
+the risk of overcorrecting for that error
+if they seem to fit
+it is true
+a purely physical universe
+the constellations
+the stars
+the stars have names only because men have named them
+the exchange of news
+the biologist's structure
+as a base for prediction
+not appropriately related
+appropriately related
+structural statements
+an aggregate of messages
+truths about things
+items of mental life
+items of ideational life
+the underlying pattern
+the underlying pattern of a given computation
+no exceptions
+propositional steps
+the outcome of the sequence
+something about the relation
+gaps of detail
+gaps of detail between details
+the machinery of description
+gaps between kinds of description
+separate statements
+the continuum of nature
+a discontinuum of variables in the act of description
+a discontinuum of variables in the act of specification
+a similar discontinuity
+regions of gap
+the apparent control
+the apparent control offered by technology
+more conscious of lack of power
+this it is to be ambitious
+human mental subsystems
+the result of liberation from appetitive drives
+that state of mind which is induced by absolute certainty of death
+separate notions
+pre-adolescent girls
+a kind of freedom
+understanding the conditions for health of the larger network
+partial clues to understanding the conditions for health of the larger network
+without understanding
+that common premise
+that common premise on which it is easiest to agree
+it is assumed
+both sides
+both sides of any interface
+the less than human
+ways of seeing
+the encounter between minds
+partly true
+the rate at which things are changing
+the rate at which things were changing in classical Greece
+the rate at which things were changing in the beginning of the Christian Era
+the premises of language
+the direction in which the changes are taking place
+the storm of ideas in which we must find spiritual rest
+answers to the riddle
+when we focus too narrowly upon the parts
+we fail to see the necessary characteristics of the whole and are then tempted to ascribe the phenomena resulting from wholeness to some supernatural entity
+all messages
+the sense in which I want to use the word
+a holist
+the idea of the broken bone
+units connected together by communication
+self-corrective systems
+the characteristics of self-corrective systems
+ways of thinking
+the new developments
+a total, living, self-correcting, and self-destroying entity
+the phenomena of minds
+part of the mental organization of the body
+aware of disruption
+the larger and more inclusive system
+no mind distinct from the body
+no mind distinct from the body and no body distinct from the mind
+part of human nature
+it is part of human nature to learn not only details but also deep unconscious philosophies
+to take the shape and character our culture imposes upon us
+below awareness
+often below awareness
+friendly strangers
+working on a book
+a set of ideas
+to shape the book
+the tools available today
+the ways of thought we might have to explore in the study of another species
+the ways of thought we might have to explore in the study of a culture with different premises from our own
+this shifting of gears
+this adjustment of preconceptions
+spatial relations
+the sacred mountain
+other kinds of symbolic elements
+the kind of diversity of reference necessarily present in anthropology
+humanly constructed meaning
+a profound necessity
+any anthropologist
+the interface
+where do the mental and the material meet?
+the issue is more fundamental than that
+the entire biological world
+the same problem
+a community that lives by communication
+as ethnographers
+organizational forms
+the organizational forms
+a community's daily affairs
+the messages and codes and organizational forms that bind a community together
+we must move from one local epistemology to another
+interacting communities of organisms
+Kenneth Pike
+parts of local epistemology
+particular human cultural systems
+to understand organisms
+there are limits to these strategies
+in the context of his communication and relationships
+how well our descriptions fit their reality
+within the context of science
+within the context of science, we are concerned about whether our descriptions will ever have the capacity to predict
+the difference between what the ethnographer perceives and what the natives perceive
+unless we can identify causes
+each of these
+each of these is a living system
+in each of these cases
+what information is available
+to know what information is available
+to know what information is available and how it is coded
+the next step in growth
+the next step in behavior
+the concerns of an anthropologist
+this approach to epistemology
+to study our descriptions
+our descriptions
+revealing descriptions
+to develop revealing descriptions
+to develop revealing descriptions of other systems with which we interact
+anthropology is often seen as a path to self-knowledge as well as a way of understanding what is strange and foreign
+the development of this line of thinking
+it is rare
+it is rare to ask
+it is rare to ask the same question
+communicative devices
+perceptual devices
+a minute fraction of the whole
+recursive loops
+our reliance on learning and teaching as adaptive mechanisms
+our own information-processing activity
+linguistic transformation
+the maps with which we work
+the development of rhetorical devices
+types of discourse
+logical fallacy
+taxonomies of logical fallacy
+in a network of communications
+improper uses
+avoid the errors
+the reasons of the heart
+take the reasons of the heart seriously
+material reality
+material reality is always known at second hand
+the effort of objectivity
+genetic determination
+adaptive programs
+its internal communications
+thinking about things
+nouns
+nouns are not things
+the capacity for false reification
+clusters of abstract relations
+any idea
+any available idea
+one way of looking at this
+the semantics
+to some degree
+the affirmation lies in juxtaposition
+a given proposition
+complex propositions
+our affirmations
+the internal structure of linguistic sequences
+the modeling of lineal causal chains
+logical entailment
+physical causation
+another kind of juxtaposition
+contradictory signals
+the confusion of logical types
+in the syntax
+other types of communication
+confusions of logical type
+contradictions of logical type
+nonlinguistic elements
+contextual elements
+human linguistic communication
+the source of the message
+to miscommunicate
+the basic thesis of this book
+in the evolution of language
+styles of discourse
+areas of discourse
+the other set of questions
+if ideas are to be combined in new ways
+what we must have if ideas are to be combined in new ways
+ways of talking
+new ways of talking
+a potential for development
+forms of discourse
+means of knowledge
+means of decision making
+a biological science
+recognizing what we have
+modes of description
+the risk of distortion
+the risk of failure
+direct physical causation
+the physical universe provides randomness and entropy
+a possible something
+a difference
+a difference between what is and what might have been
+the study of pathology
+the study of pathology as a means to the understanding of the normal
+the nature of the inappropriateness
+to talk about the living world
+to think sensibly
+misread
+mistreat
+mistreatments
+our mistreatments of each other
+not knowing
+not knowing what we are dealing with
+the communicative web
+trying to understand that relationship
+a part of what we mean
+constituting a larger system
+love is based on metaphor
+the value of the relationship
+to assert the value of the relationship
+a three-way metaphor
+a three-way metaphor that links self and other and also self plus other
+in this recognition
+the value of self
+the value of other
+the value of self and other
+a basic intellectual strategy
+to assert similarity
+to assert similarity, of the kind that permits further inferences, rather than identity
+a formal similarity
+all organisms
+a description consisting of multiple parts which is nevertheless unified
+a logical organization
+a logical organization of description
+each term
+it is not a matter of identity
+parts of the metaphorical structure
+this kind of metaphor
+the distinctive characteristics of this kind of metaphor
+a rose
+the successive stories
+the successive stories prove to be the same story, with small variations
+it is because a metaphor has multiple parts that we can use it to think with
+that family of metaphors referred to as the pathetic fallacy
+the pathetic fallacy
+in my image
+many interrelated implications of some small change
+a unified picture
+a unified and integrated picture
+a single component
+a tiny change
+implications for other aspects
+the effect of a slight change
+an existing model
+the self/the entire being
+the entire being
+the entire being, psyche and soma
+the possibility of reference to the self
+deliberate alteration
+one's sense of relationship to the biosphere of this planet
+imaginal identification
+a new degree of attention
+Jean Houston
+mental motion
+a new freedom of mental motion
+imagined identification
+an imagined identification with another person
+one's understanding of an idea
+one's understanding of an event
+book: The Possible Human
+how would he see this?
+to watch it ripple through the system
+thinking oneself into the other person
+playing a question through alternate filters
+playing a question through alternate filters and seeing how it is processed each time
+members of a conference
+members of a committee
+can I hear her discussing that?
+can I hear him discussing that?
+how would he respond to that?
+mental shorthand
+a series of new encounters
+the dilemmas presented
+the dilemmas presented by one's life
+one of the most basic forms of meditation
+one of the most basic forms of meditation in the Christian tradition
+kinds of identification
+empathy as a discipline
+one's self
+different modes of expression
+can I change my understanding of something by dancing with it?
+my inferences
+one stage of thought
+the way in which I move from one stage of thought to another
+thinking of dancing
+thinking of dancing it
+is that the same kind of thing?
+each of these identifications
+systems that one can enter
+systems that of thought that one can enter
+the believer
+playing something through a mental model
+for one who is willing to suspend belief
+totemic
+totemic cosmology
+into relationship
+human institutions
+his place
+his place in that complex whole
+the truth of unified understanding
+a long list of facts
+a single, unified understanding
+in a single, unified understanding
+their individual lives
+a religion
+intergrated complexity
+levels of intergrated complexity
+the focus of meditation
+cognitive subsystems
+partially circumscribed cognitive subsystems
+creatural thought
+contextual rules
+those complex relations
+the question becomes clearer
+like me
+an order of knowledge
+their own bodies
+the communications appropriate to understanding creatura
+a kind of therapy
+the uses of paradox
+the sense of time
+a way of handling stress
+a way of unlearning the addiction to entertainment
+a way of unlearning the addiction to entertainment and its accompanying vulnerability to boredom
+it is striking that religious metaphors are so largely paradoxical
+describing the natural world
+if it is the case
+if it is the case that logic has inadequacies in describing the natural world
+the logical levels
+every organism
+a great deal of adaptation
+efforts to deal with double-bind situations
+how the notion of metaphorical thinking might apply to systems consisting of multiple organisms
+how the notion of metaphorical thinking might apply to other organisms
+other kinds of organisms
+kinds of organisms
+the change in this
+the change in this value
+a dynamic pattern
+characterized by a dynamic pattern
+to detect other patterns
+to classify other patterns
+to classify other patterns of dance
+to classify other patterns of dynamic
+to classify other patterns of dynamics
+to detect other patterns of dynamics
+the environment/dynamic pattern
+a distributed sense
+a distributed sense organ
+interacting multiplicity
+news of change
+news of contrast
+the eternal synchronic present
+information about
+metazoa
+the command aspect of information
+the injunctive aspect of information
+this discussion
+analogous to a sense organ
+a religious ritual
+participation in a religious ritual
+the formal characteristics will be the ones that matter
+the dance
+the dance/the metaphor
+other kinds of description
+ways of knowing for which other kinds of description are so far inadequate
+an area of experience
+multiple cycles
+the results of calibration
+tuned and tuned and tuned again
+centuries of tradition
+it took a lot of thought to make the rose
+identifying deity with the abstract relationships recognizable in nature
+affirming and at the same time denying
+another argument
+nondemonstrable
+the functional question
+through human history
+perhaps necessarily
+what you are telling us
+a sort of example
+an illustration of something else
+believe in
+not necessarily the only way
+interconnected metaphorical systems
+correctives
+the errors of human language
+the capacity to be wrong
+so wrong
+this world we cannot understand
+the richest knowledge of the tree includes both myth and botany
+this fragment
+this fragment of a prayer
+the civilization
+such immortality as we have is in our ideas
+a mode of being
+that's what I want to avoid
+the other side of it
+a quality of otherness
+the loss
+a loss
+pulling them together and making connections that were never made
+a nude male figure
+the basic ideas
+the necessary truths
+the links between the propositions
+the problem of the misuse of ideas
+you may not believe in the existence of ghosts, but you do believe in the existence of ideas
+human perception
+grumpy about it
+the total contextual structure
+correcting for it
+some of the information has been lost
+an essential part of the idea
+to identify the missing pieces
+succinct definition
+a degree of inconsistency
+technical terms
+the possibility of further similarity
+a recognizable similarity
+more familiar
+more familiar types of reasoning
+a feature of an organism
+a theory of the beautiful
+cultural premises
+a stochastic system
+two or more species
+some fraction
+a gnostic term
+the distinctive processes of life
+digital signals
+a magnitude
+a quantity
+a quantity in the signal
+unacknowledged contradiction
+as a unified whole
+an emotionally important relationship
+information exchange
+energy exchange
+many other senses
+at each stage
+the process of embryology
+how organisms decide
+how aggregates of organisms decide
+a branch of science
+a branch of science combined with a branch of philosophy
+as philosophy, epistemology is the study of the necessary limits and other characteristics of the processes of knowing, thinking, and deciding
+as science, epistemology is the study of how particular organisms or aggregates of organisms know, think, and decide
+cybernetic explanation
+negative feedback
+in recursive systems
+the outcome of previous functioning
+the mechanism governing future functioning
+allowing for corrections
+the message of a single neural impulse
+any difference that makes a difference
+changes in coding
+the interaction of systems that may not be entirely enclosed or bounded
+the learning capacity of the system
+as a limiting case
+a technical term
+a technical term in mathematics
+underlining
+as a way of thinking
+this moved him along
+to be different
+integrative
+the potential for manipulation
+the potential for division
+the potential for obscurantism
+his hesitation
+those prepared to wrestle with such questions
+the Bateson household
+arguing our way towards clarity
+a reminder
+as a reminder
+relationship and communication
+a discordant sound
+the false juxtaposition
+warm friendships
+close intellectual collaborations
+a clarifying contrast
+something he still aspired to do
+something he had actually done
+that last period
+a permanent base
+a steady source of income
+his reading
+his groping
+kinds of muddle
+kinds of intellectual vulgarity
+intellectual vulgarity
+if you read between the lines
+the lonely skeleton of truth
+highly evocative
+formalism
+less rigorous forms of discourse
+a context for interpretation
+real caution
+real irritation
+critically important matters
+failing to attend to critically important matters
+Western science
+methodological premises
+epistemological premises
+the way they were talking
+to talk sense
+his rejection of this
+Western thought
+in Western thought
+mind without matter cannot exist
+matter without mind can exist but is inaccessible
+a double claim
+attempting to rethink
+attempting to rethink these issue
+a strategy of redefinition
+the conceptual tools of cybernetics
+redefined
+several kinds of criticism
+a form of rhetorical dishonesty
+his understanding
+key characteristics
+scientific discourse
+in scientific discourse
+what interested him most
+significant new insight
+deliberately evocative
+the range of issue
+those who find the word unusable
+in full seriousness
+what we know about the biological world
+attempting to clarify
+what one might mean
+the concept of the sacred
+the organization of the biological world
+ways of looking at the biological world
+ways of looking at thought
+a constellation of issues
+above all
+at the moment of completion
+the implicit waits to be discovered
+what the book is not about
+chiaroscuro
+still wider
+the pathways of computation
+our knowledge of ethics
+the elemental details
+all of our thought
+higher levels of order
+higher levels of organization
+higher levels of sense
+even more difficult to access
+matters of first importance
+matters of primary importance
+mystical literature
+often beautiful
+membership in a small minority
+steadfast faith
+less sophisticated
+Saint Thomas
+William Paley
+William Paley's Evidences of Christianity
+behavioral phenomena
+Carl Jung
+Carl Jung's Seven Sermons to the Dead
+a series of ideas
+working out the details of particular cases
+the old mysteries
+a new set of challenges
+the new partial answers
+impatient enthusiasm for action
+epistemological panic
+to elaborate
+exchanges of information
+exchanges of information and injunction
+in the aggregate
+the essence of our explanation
+the most elementary level
+at the most elementary level
+the difference between paper and ink is the signal
+the mental process
+the Kantian Ding an sich
+in summary
+it is important to be clear
+organizational and communicational characteristics
+not sufficient for explanation
+the arrangement of material parts
+the effects of difference
+these processes of transformation
+the description of these processes of transformation
+the classification of these processes of transformation
+parts of organisms that have a degree of autonomy in their self-regulation and functioning
+only some of the characteristics
+the self-regulation
+the self-correction
+certain propositions
+the truth of certain propositions
+capable of self-replication
+to be a component
+to be a subsystem
+some larger mind
+some larger and more complex mind
+a component in an organism
+a component in a community
+a person may be a component in a community
+an individual cell may be a component in an organism
+our understanding of such interfaces
+different kinds of mental subsystems
+especially concerned
+human purposes
+all human purposes
+for all human purposes
+the regularities
+appropriately translated
+in our thought
+love and hate
+human organization
+different kinds of description
+the inanimate material world
+describing the inanimate material world
+that primary step
+bad premises
+statement of connection
+Jung's statement of connection between Pleroma and Creatura
+a much healthier first step
+a more conventional definition
+there is a more conventional definition
+my definition
+epistemology as a branch of natural history
+the larger realm
+a basic characteristic
+to define the direction of my thinking
+every human individual
+personal habits
+individual systems
+the task of anthropologists
+the price that muddled systems pay for their errors
+the rules for drawing maps
+the nature of that which is represented
+the nature of that which is represented in the map
+anthropological orthodoxy
+a subject of inquiry
+Curtis Wilson
+a logical premise
+communicating interconnection of ideas
+the dominant mode
+the dominant mode of communicating interconnection of ideas
+the first person who actually saw this clearly
+Vaihinger
+the message about the message
+I want to talk about talking about play
+a story about metamessages
+the otter story
+thinking about learning
+thinking about learning to learn
+we're getting into a tangle
+the verbal conversation
+it is not irrelevant
+communication of relationships
+Konrad Lorenz
+in conversation
+in order to communicate
+in order to communicate a truth
+in order to communicate a truth about relationships
+in order to exemplify an idea
+the really important stories
+the myth of Kevembuangga
+repetitions of parts
+repetitions of repetitions of parts
+the human spinal column
+a right-handed spiral
+geometric form
+the narrative
+something alive
+a basis for recognition
+part of what I meant
+reason is the bound or outward circumference of energy
+relations within the subject that is being modeled
+relations within the subject that is being modeled can be examined by comparing them with relations within the model
+a specific ecological niche
+the social processes of character formation
+this particular example
+the quantitative aspects
+the continuously varying quantity
+a small box
+thermal characteristics
+the thresholds for maximum and minimum
+the system is error activated
+goal activated
+this falsification of how we know what we think we know
+appetitive
+the world of the machines
+the inner workings of the heating system
+as an example
+to think about the ecology of this system
+to think about the epistemology of this system
+these fixed points
+within the set limits
+between these limits
+the setting
+this gap is inevitable
+the discontinuous
+a digital mechanism
+that which is to be described or controlled
+an analogic characteristic
+a quantitative characteristic
+a continuously varying characteristic
+at this point
+the description will have a gap
+the fact of the gap
+to hide the fact of the gap
+complete accuracy
+digital classification
+the theory of logical types
+represented in a diagram
+state/event
+structure/event
+structure/dynamic
+some threshold level
+an aggregate of events in the subsystem
+as a component
+a component
+looking at a hierarchically organized, self-corrective system
+the relationship between these two diagrams
+one event of self-correction
+the range of fluctuation
+the system is changed
+calibration
+feedback
+not assuming that the phenomena must always exist in combination
+a flow of events
+a process channeled by structure
+a convenient next step
+the feedback method
+correcting that error
+shooting with a rifle
+two methods
+The Analysis of Behavior in Terms of Control Systems
+news of discrepancy
+the whole single action
+shooting skeet
+becoming more skillful
+completed acts
+to change the setting
+the coordination
+the prime characteristic
+a large sample of acts
+the use of a large sample of acts to achieve a better setting of the internal mechanisms of response
+classes of error
+the experience of a sequence of cycles
+automatic or spontaneous skill acquired by longer practice
+the single action
+to use error correction
+the contrast between the use of the rifle and that of the shotgun
+after the action is complete
+one more unit of experience
+cases where we move up to a second logical level
+the notion zero-learning
+the praying mantis
+the creature's processes of learning
+changes in the characteristics of the creature's processes of learning
+learnings
+some explanation
+some explanation of this classification
+this definition of learning
+the failure of a property that has been changed by an external agent to return to its original value when the cause of the change is removed
+resonance patterns
+an aspect that can be described physically
+two or more components
+any other two or more components in a sequence of interaction
+attributes of items
+attributes of relations between items
+categories of learning
+the difference between the two
+the difference between the two is a difference of logical typing
+more inclusive
+the unit of action
+it was plain
+this dilemma
+a problem in self-correction
+a problem in self-correction from moment to moment
+the surrender
+to surrender
+to surrender to that necessity
+to surrender to that necessity which marks the boundary between conscious self-correction and unconscious obedience to inner calibration
+in learning
+kinds of experience we label religious
+neither supernatural nor mechanical
+before we can attempt to discover what it is to hold something sacred
+certain barriers
+every speaker
+every speaker in such a discussion
+every speaker in such a discussion must make clear where he or she stands on a number of topic related to basic premises of this civilization
+the epistemological perplexity
+the epistemological perplexity in which we all live today
+mind is an organizational characteristic, not a separate substance
+the material objects
+the residential heating system
+certain mental processes
+responding to differences
+many other kinds of systems of thought
+several ways of thinking
+of necessity
+superstitions
+supernatural
+charlatanism
+a need to change from one posture of discomfort to another
+the dehumanizing
+conventional themes
+conventional ways of life
+the older belief
+the older beliefs have ceased to provide either explanation or confidence
+dimly felt obsolescence
+is central
+is central to
+to limit the excesses
+we know enough today to expect that this improved stance will be unitary
+both of these extremes
+both of these extremes of opinion
+really I do
+at the present time
+easier to believe
+material being
+sensory end organs
+those properties that belong to the world of matter
+the most pernicious
+mental magic
+real dimensions
+the explanatory principle
+physical quantities
+partly aware of what is being done
+ritual statements
+all the participants
+the pathway
+embodiment in material arrangements
+many effects of my actions
+in a physical sense
+the ground that every figure must have
+there is sometimes a confusion between different kinds of validity
+a list of the pieces
+both obsolete and dangerous
+erroneous beliefs
+the seventeenth century
+the half that could be explained
+ecological disaster
+it is a basic premise
+the ultimate in nonsense
+the emphasis on quantity
+quantitative materialism
+inquiry into mental processes
+neither of these two
+a name for a class
+psychological process
+the negative purpose
+my principal purpose
+material causes
+predictable or partly predictable
+creatural sequences
+much more complicated creatural sequences
+superior vena cava
+that was only part of the story
+nothing could be done
+but be careful
+what we have implanted
+longer to correct
+in all human affairs there is a lag, a stickiness or viscosity
+our errors will, I think, take longer to correct that to commit
+responsible to difference
+responsive to difference
+cybernetic terms
+in cybernetic terms
+kinds of treatment
+I continue to be distrustful
+the issue of consistency is the issue of how things fit together, not of whether they are the same
+ideas about medicine
+ideas about the patient
+uniformity
+different kinds of nonsense
+here is what is bothering me
+the habit
+committing sacrilege
+a reframing of relationship
+I'm not complaining about that
+the theme of the importance of keeping a secret
+the basic discontinuities
+I'm not at all sure
+a standard liberal political position
+a toxic kind of uniformity
+there is no analogy
+evidence for the assertion
+the resolution of guilt
+your mental image
+a recognition of the importance of these presuppositions of which we are normally unaware
+Ames
+your machinery of perception is governed by a system of presuppositions I call your epistemology
+at what level are we to interpret it?
+are we relying on presuppositions of which we are unaware?
+unmapped
+a sequence of three neurons
+the only possible cause
+the aggregates of propositions that are called faiths
+an unawareness of the links
+to show itself
+we form images of that which we see
+complete belief
+in a healthy mind
+a healthy mind
+these mental processes
+our conscious introspection
+that greater faith
+my processes of image formation
+defense against loss of faith
+the validity of our belief
+Blake
+there is no time for more than a little consciousness
+groups of organisms
+constellations of organisms
+the mechanisms by which such systems are maintained and kept stable
+pathological rigidity
+to reach judgments
+to reach judgments of value
+to understand their necessity
+interactional
+most ancient
+most profound
+most instructive
+the sexual component in reproduction
+at the cellular level every living organism is the embodiment of a tested sharing of biological presuppositions
+a validating template
+the observed world
+too much discrepancy
+the experience of one's own action
+more accessible to experiment
+declaiming
+a definition for consciousness
+the way subsystems are hooked into a larger whole
+growth in size
+to be triggered
+the neuron
+what is asserted
+so complex
+chemical messages
+hormonal messages
+difference in effect
+units of input
+the magnitude of the variable to be measured
+the subtractive side
+the additive side
+biological causation
+communication systems of the body
+material quantities
+interaction with the environment
+the engineering side of the world
+fairly obviously
+a problem of transcendence
+two sides and you have to deal with them both
+one of the interesting thing about it
+first-level learning to do the right thing in a particular context
+the University of California
+what have we got?
+a great number of descriptive statements
+having a rising gradient
+binge alcoholics
+these systems of interlocking variables
+you cannot take one variable and change it continuously in one direction
+exactly the same sort of problem
+to maintain the relationship
+a cost
+getting out of hand
+a cost in doing it
+learning something new
+as reassurance is the food of anxiety, so entertainment is the food of depression
+one of the things that is important
+one of the things that is important in depression
+the various techniques
+letting the ideas spread out
+the way people get hurt
+why we need to think in terms of a machine
+the shift of attention from individual to interactive process
+moralizing
+sentimentalizing
+some kind of interface
+often one of the parts is nonliving
+if there is interaction
+the life of the other
+a useful concept
+any act of description
+certain kinds of evolutionary error
+possible types of cognitive error in evolution
+the occurrence of all possible types of cognitive error in evolution
+when something goes wrong in epigenesis, you are likely to get a nonviable organism or one that cannot reproduce
+extinction
+that which survives is what survives
+the Roman Empire
+kinds of epistemological error
+a propensity to make certain kinds of epistemological error
+to care about
+some system of religious belief
+an ancient ecosystem at climax
+their integration
+there is no way back
+defining the moment of error
+the idea of the damned and the saved
+the line between the converted and the unconverted
+the dualism of good and evil
+good and bad
+James Lovelock
+the physical reality of the planet
+the fact that the interconnections are not entirely tight
+the fact that
+when we study the biological world, what we are doing is studying multiple events of communication
+the system of premises that underlies all messages and makes them coherent
+the setting of a thermostat
+these are the landmarks
+causal effect
+negation
+communication between organisms
+a curious twist
+to answer the other set of questions
+what it means to have a hand
+its epigenesis
+as a scientist
+a process of thought with internal consistency
+a process of thought with internal consistency and a potential for development
+a prescription for recognizing what we have
+his critique
+within the existing range of human communication
+the rest of the biological world
+in primary process
+vastly complex operations
+at the risk of distortion
+at the risk of failure
+the error being a difference between what is and what might have been
+inappropriate translation
+only then
+the relationship between epistemology and ethics
+positive valuation
+the person whom I love
+together constituting a larger system
+conformability
+some degree of conformability
+to assert the value of the relationship as well as the value of self and other
+to assert significant similarity, of the kind that permits further inferences, rather than identity
+his equation
+the metaphorical recycling of an old idea
+emphasizing abduction
+a way to approach the question
+the pieces of his thought
+the disciplines of communication in creatura
+the disciplines of communication in or like or about creatura
+the beginning of a creatural grammar
+the effort to describe creatura
+a description consisting of multiple parts which is nevertheless unified, with a logical organization which in some way models the complexity of organization in living systems
+the whole hangs together
+each term of a metaphor is manifold--must have its own internal complexity
+equivalence of the relationships between the parts of the metaphorical structure and that which it models
+one kind of extended metaphor
+constructed of multiple parts
+to use a very different kind of example
+a few flickering moments
+the many interrelated implications of some small change
+working out its implications
+working out its implications for other aspects
+working out its implications for other aspects of design
+working out its implications for other aspects of performance
+our capacity to construct a model of it
+our capacity to construct a model of it as a whole
+an existing model that has within it the necessary complexity
+we find an existing model that has within it the necessary complexity
+a model that is alive
+we need not limit ourselves
+partly accessible
+partly accessible to deliberate alteration
+an imaginal identification
+an imaginal identification with another kind of creature
+an imaginal identification with another kind of creature can instruct a new degree of attention, as well as enrich and inform the sense of self
+the motion of other phyla
+a way of discovering
+a way of discovering a new freedom
+a way of discovering a new freedom of mental motion
+a way of discovering a new freedom of mental as well as physical motion
+to live within a double bind
+the metaphors that have made it possible to live within a double bind
+ancient barriers
+ancient barriers to human understanding
+inadequacies in describing the natural world
+it seems likely
+any given message
+in any given message
+the ability to make the best of a bad deal
+the meadow with its interacting multiplicity of species
+news of change and contrast
+that dx/dt which is the eternal synchronic present
+certain distortions
+certain pathologies
+certain pathologies in communication
+direct attacks
+the addiction to entertainment
+unlearning the addiction to entertainment
+a human artifact
+not simply a human artifact
+the task of learning
+immanent in the living world
+immanent in the world
+Epimenides paradox
+its own internal structure
+its response to its enviromnent
+to organize and generate its response to its enviromnent
+some other complexity
+so far inadequate
+essential to human adaptation
+a work of art
+a work of art is the outcome of mental process
+the human body
+the thought that enters into its creation
+repeated testing
+repeated testing and listening
+these are the characteristics that must persistently elude even the most meticulous efforts to describe
+the direction of the course
+you can't get around the unconscious
+she didn't turn up in my dreams
+what you discovered
+a loss/the loss
+a loss of the information/the loss of the information
+that you cannot do
+I can do what I have done before
+drawing the connections between pieces of thinking
+drawing the connections between pieces of thinking that the participants had perceived as disparate, even as dissonant
+I had an image once
+the unconscious is always up to all sorts of other business
+points of light
+the diagram of a constellation
+this whole body of ideas
+it's all in the connections
+if P, than P
+mathematical in form
+there are the basic ideas
+there are the basic ideas which are necessarily true
+there are the basic ideas which are necessarily true but need to be discovered
+the bits of data
+the bits of data that allow you to see the connections when you try to map them onto the necessary truths
+a bit of a bully
+all that nonsense
+growing is precisely what a tautology doesn't do
+the essential requirement of tautology is that the links between the propositions shall be empty
+in that sense
+the good lines
+you can't count double binds
+one tip of an iceberg
+breaking up process into entities
+this business of breaking up process into entities in pretty fundamental to human perception
+so grumpy
+rather nasty
+you really can't own ideas
+I saw a connection
+I just saw a connection
+I just saw a connection, I think
+rather differently
+that might make them think rather differently
+that might make them think rather differently about possessiveness
+how do you own an idea?
+how do you own an idea, a relationship?
+what I think is going on
+the same thing/the same process
+creating a monstrousness
+some information has been lost, an essential part of the idea
+we can try to identify the missing pieces
+the right questions
+the right questions/the right context
+the missing pieces of the idea
+being useful
+the same process
+what I think is going on is the same process
+the family-therapy industry
+two kinds of terms
+glossary
+a glossary
+the glossary
+significant concepts
+these definitions
+he was still struggling with their meanings
+enclosed in brackets
+not included
+not included here
+access to a good dictionary
+that form of reasoning in which a recognizable similarity between A and B proposes the possibility of further similarity
+the processes
+the processes whereby beauty is created
+the processes whereby beauty is acknowledged
+the learning of cultural premises
+the learning of cultural premises conveyed through repeated sequences in child-rearing
+the knower
+the knower is aware of some fraction of his knowledge
+the thinker is aware of some fraction of his thought
+physical laws of causation
+a branch of mathematics
+a continuously variable quantity
+the referent
+unacknowledged contradiction between messages at different logical levels
+dualism/monism
+energy exchange/information exchange
+as science
+epistemology as science
+epistemology as philosophy
+such units
+system boundaries defined by information exchange
+systemic interaction
+the locus of systemic interaction
+economically specified
+the sharp contrast
+no way of predicting
+overly strong
+overly strong insistence
+to shoot with a bow at a target
+the mental characteristics of larger systems
+the triad of learning
+</textarea>
+  </body>
+</html>
